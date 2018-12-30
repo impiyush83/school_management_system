@@ -10,7 +10,7 @@ class User(models.Model):
     username = models.CharField(max_length=10, null=False)
     password = models.CharField(max_length=20, null=False)
     type = models.CharField(max_length=4, choices=[(tag, tag.value) for tag in UserType], null=False)
-    name = models.CharField(max_length=50, null=True)
+    name = models.CharField(max_length=50, null=False)
 
 
 class Attendance(models.Model):
