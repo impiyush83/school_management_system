@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-from school_management_app.model_constants import UserType, AttendanceStatus, ExamStatus
+from school_management_app.constants.model_constants import UserType, AttendanceStatus, ExamStatus
 
 
 class User(models.Model):

@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import school_management_app.model_constants
+import school_management_app.constants.model_constants
 
 
 class Migration(migrations.Migration):
@@ -18,14 +18,16 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.IntegerField(auto_created=True, primary_key=True, serialize=False)),
                 ('date', models.DateField()),
-                ('status', models.CharField(choices=[(school_management_app.model_constants.AttendanceStatus('P'), 'P'), (school_management_app.model_constants.AttendanceStatus('A'), 'A')], max_length=2)),
+                ('status', models.CharField(choices=[(school_management_app.constants.model_constants.AttendanceStatus('P'), 'P'), (
+                school_management_app.constants.model_constants.AttendanceStatus('A'), 'A')], max_length=2)),
             ],
         ),
         migrations.CreateModel(
             name='ExamHistory',
             fields=[
                 ('id', models.IntegerField(auto_created=True, primary_key=True, serialize=False)),
-                ('status', models.CharField(choices=[(school_management_app.model_constants.ExamStatus('ACTIVE'), 'ACTIVE'), (school_management_app.model_constants.ExamStatus('EXPIRED'), 'EXPIRED')], max_length=2)),
+                ('status', models.CharField(choices=[(school_management_app.constants.model_constants.ExamStatus('ACTIVE'), 'ACTIVE'), (
+                school_management_app.constants.model_constants.ExamStatus('EXPIRED'), 'EXPIRED')], max_length=2)),
             ],
         ),
         migrations.CreateModel(
@@ -51,7 +53,9 @@ class Migration(migrations.Migration):
                 ('created', models.DateField(auto_now_add=True)),
                 ('username', models.CharField(max_length=10)),
                 ('password', models.CharField(max_length=20)),
-                ('type', models.CharField(choices=[(school_management_app.model_constants.UserType('PARENT'), 'PARENT'), (school_management_app.model_constants.UserType('TEACHER'), 'TEACHER'), (school_management_app.model_constants.UserType('STUDENT'), 'STUDENT')], max_length=4)),
+                ('type', models.CharField(choices=[(school_management_app.constants.model_constants.UserType('PARENT'), 'PARENT'), (
+                school_management_app.constants.model_constants.UserType('TEACHER'), 'TEACHER'), (
+                                                   school_management_app.constants.model_constants.UserType('STUDENT'), 'STUDENT')], max_length=4)),
                 ('name', models.CharField(max_length=50)),
             ],
         ),
