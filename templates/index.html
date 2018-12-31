@@ -1,10 +1,117 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>School Management System</title>
-</head>
-<body>
-    <h1> Login Buddy </h1>
-</body>
+    <head>
+        <link href="{% static 'css/home_style.css' %}" type="text/css" rel="stylesheet"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="header_wrapper">
+            <div class="t-left">
+                <a class="site-branding">
+                    <img src="{% static 'img/logo.png' %}" width="200px"/>
+                </a>
+            </div>
+
+            <div id="header">
+                <form method="post" id="user_login">
+                    <li>Username<br><input type="text" name="username"  required></li>
+                    <li>Password<br><input type="password" name="password" required></li>
+                    <li><input type="submit" name="login" value="Log In"></li>
+                </form>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="div2" style="align-self: center ; margin: 100px 400px 400px 100px ; padding-left: 200px ">
+                <h1>Create an account</h1>
+                    <form name="signup"  method="post" id="add_user">
+                        <li>
+                            <input name="name" type="text" placeholder="Full Name" id="name" required>
+                        </li>
+                        <li>
+                            <input name="username" type="text" placeholder="User Name" id="username" required>
+                        </li>
+                        <li>
+                            <input name="master_key" type="text" placeholder="Master key only for teacher signup">
+                        </li>
+                        <li>
+                            <input name="password" type="password" placeholder="New password" required>
+                        </li>
+                        <li>User type:</li>
+                        <li>
+                            <input name="type" onclick="master_key()" type="radio" value="Teacher" required>Teacher
+                            <br>
+                            <input name="type" onclick="master_key()" type="radio" value="Parent" required>Parent
+                            <br>
+                            <input name="type" onclick="master_key()" type="radio" value="Student" required>Student
+                        </li>
+                         <br>
+                        <li>
+                            <input  type="submit" value="Create an account" >
+                        </li>
+                    </form>
+            </div>
+        </div>
+    </body>
 </html>
+
+<script>
+
+    $(document).ready(function (e) {
+            $('#add_user').on('submit', (function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                var object = {};
+                formData.forEach(function(value, key){
+                    object[key] = value;
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: "/user/signup",
+                    data: JSON.stringify(object),
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json",
+                    processData: false,
+                    success: function (data) {
+                        console.log("success");
+                        console.log(data);
+                        alert("Success");
+                        location.reload();
+                    },
+                    error: function (data) {
+                        alert("ERROR : " + data.status);
+                        location.reload();
+                    }
+                });
+            }));
+        });
+
+
+          $(document).ready(function (e) {
+            $('#user_login').on('submit', (function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                var object = {};
+                formData.forEach(function(value, key){
+                    object[key] = value;
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: "user/login",
+                    data: JSON.stringify(object),
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json",
+                    processData: false,
+                    success: function (data) {
+                        window.location.href='user/home'
+                    },
+                    error: function (data) {
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
+                        location.reload();
+                    }
+                });
+            }));
+        });
+</script>

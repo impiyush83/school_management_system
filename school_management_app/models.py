@@ -2,15 +2,21 @@ from django.db import models
 
 # Create your models here.
 from school_management_app.constants.model_constants import UserType, AttendanceStatus, ExamStatus
+from school_management_app.responses import resource_conflict
 
 
 class User(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     created = models.DateField(auto_now_add=True)
-    username = models.CharField(max_length=10, null=False)
+    username = models.CharField(max_length=10, null=False, unique=True)
     password = models.CharField(max_length=20, null=False)
     type = models.CharField(max_length=4, choices=[(tag, tag.value) for tag in UserType], null=False)
     name = models.CharField(max_length=50, null=False)
+
+    @classmethod
+    def insert_user(cls, data, user_type):
+        user = User(name=data['name'], username=data['username'], password=data['password'], type=user_type)
+        user.save()
 
 
 class Attendance(models.Model):
