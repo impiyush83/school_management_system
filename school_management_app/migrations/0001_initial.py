@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
                 school_management_app.constants.model_constants.AttendanceStatus('A'), 'A')], max_length=2)),
             ],
         ),
+
         migrations.CreateModel(
             name='ExamHistory',
             fields=[

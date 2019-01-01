@@ -1,0 +1,27 @@
+1. Teacher
+
+- Can signup and login with master key
+- Can enroll student to subject particular subject
+
+
+2. Parent
+
+- Can signup and login
+
+
+
+3. Student
+
+- Can signup and login
+
+
+
+
+2 Dept :
+
+Engg   |   Pharma
+
+CS  -- IT    | Medicine, Dental
+ML, NLP -- Web Development, Software Engineering  |  MedSub1, MedSub2 -- DentalSub1, DentalSub2
+
+All the subjects migrated into the table in data migration. Backward compatible.
