@@ -19,16 +19,16 @@
                         <div id='cssmenu' class="align-center">
                             <ul>
                                 {% if user.type == 'STUDENT' %}
-                                    <h2><li><a><span style="color:blue;">Hello Student {{ user.name }}</span></a></li> </h2>
+                                    <h2><li><a><span style="color:blue;">Student Dashboard</span></a></li> </h2>
                                     <li><a id="view_attendance"><span>View Attendance</span></a></li>
                                     <li><a id="view_exam_marks"><span>View Exam Marks</span></a></li>
                                 {% elif user.type == 'PARENT' %}
-                                    <h2><li><a><span style="color:green;">Hello Parent {{ user.name }}</span></a></li></h2>
+                                    <h2><li><a><span style="color:green;">Parent Dashboard</span></a></li></h2>
                                     <li><a id="link_student_account"><span>Link Your Student's Account</span></a></li>
                                     <li><a id="view_attendance"><span>View Attendance</span></a></li>
                                     <li><a id="view_exam_marks"><span>View Exam Marks</span></a></li>
                                 {% elif user.type == 'TEACHER' %}
-                                    <h2> <li><a><span style="color:red;">Hello Teacher {{ user.name }}</span></a></li></h2>
+                                    <h2> <li><a><span style="color:red;">Teacher Dashboard</span></a></li></h2>
                                     <li><a id="enroll_student"><span>Enroll Student</span></a></li>
                                     <li><a id="mark_attendance"><span>Mark Attendance</span></a></li>
                                     <li><a id="enter_exam_marks"><span>Enter Exam marks</span></a></li>
@@ -40,19 +40,18 @@
                 </div>
             </header>
 
-
-            <form method="post">
-                <header>
-                    <div>
-                        <div class="t-center">
-                            <div  class="align-center">
+                <form method="post">
+                <footer>
+			        <div class="zerogrid wrap-footer">
+			        	<div class="row">
+                             <div id='cssmenu-modified' class="align-center">
                                 <ul>
-                                   <li><a id="logout"><span>Logout</span></a></li>
-                                </ul>
+                                   <a id="logout"><span>Logout</span></a>
+                                 </ul>
                             </div>
-                        </div>
-                    </div>
-                </header>
+			        	</div>
+			        </div>
+		        </footer>
             </form>
         </div>
 
@@ -82,7 +81,7 @@
         });
 
     $('#enroll_student').click(function() {
-        window.location.href = '/teacher/enroll_student';
+        window.location.href = '/teacher/enroll-student';
     });
 
     $('#add_friend').click(function() {

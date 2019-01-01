@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <style>
+            .button {
+              background-color: #4CAF50;
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+            .styled-select {
+               background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+               height: 29px;
+               overflow: hidden;
+               width: 100%;
+            }
+
+            .styled-select select {
+               background: transparent;
+               border: none;
+               font-size: 14px;
+               height: 29px;
+               padding: 5px; /* If you add too much padding here, the options won't show in IE */
+               width: 100%;
+            }
+
+            .mycolor   { background-color: #0066cc; }
+
+            .semi-square {
+               -webkit-border-radius: 5px;
+               -moz-border-radius: 5px;
+               border-radius: 5px;
+            }
+
+
+            .styled-select.slate select {
+               border: 1px solid #ccc;
+               font-size: 16px;
+               height: 34px;
+               width: 100%;
+            }
+
+        </style>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <link rel="stylesheet" href="{% static 'css/zerogrid.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <script src="{% static 'js/jquery1111.min.js' %}" type="text/javascript"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+        <link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrap-body">
+            <header class="main-header">
+                <div class="zerogrid">
+                    <div class="t-center">
+                        <div id='cssmenu' class="align-center">
+                            <ul>
+                                <li><a id="home"><span>Home</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <section id="container">
+                <div class="wrap-container">
+                    <div class="zerogrid">
+                        <form method="post" id="student-enrollment">
+                        <article>
+                            <div class="row wrap-post">
+                                <div class="entry-headert">
+                                        <h2 class="entry-title" style="color:#cc0000;"> Unenrolled students list : </h2>
+                                </div>
+                            </div>
+                        </article>
+                        <br>
+                        {%   for student in unenrolled_students  %}
+                        <article>
+                            <div class="row wrap-post">
+                                <div class="entry-header">
+                                    <h2 class="entry-title"  style="color:red;"> ID : {{ student.id }}  </h2>
+                                </div>
+                                 <div class="entry-header">
+                                     <h2 class="entry-title" style="color:red;"> Name :  {{ student.name }} </h2>
+                                </div>
+                            </div>
+
+                                <div class="styled-select mycolor semi-square">
+                                     <select name="course" class="selection" required>
+                                        {% for course in courses %}
+                                             <option>{{ course }}</option>
+                                        {% endfor %}
+                                     </select>
+                                </div>
+                                <input type="text" name="id" value="{{ student.id }}" style="display:none">
+                                <input type="submit"  class="button" value="Enroll Student">
+                        </article>
+                         </form>
+                        {%  endfor %}
+
+                        <article>
+                            <div class="row wrap-post">
+                                <div class="entry-header">
+                                        <h2 class="entry-title" style="color:#00264d;"> Enrolled students list : </h2>
+                                </div>
+                            </div>
+                        </article>
+                        <br>
+                        {%   for student in enrolled_students  %}
+                        <article>
+                            <div class="row wrap-post">
+                                <div class="entry-header">
+                                    <h2 class="entry-title"  style="color:#004080;"> ID : {{ student.id }}  </h2>
+                                </div>
+                                 <div class="entry-header">
+                                     <h2 class="entry-title" style="color:#004080;"> Name :  {{ student.name }} </h2>
+                                </div>
+                            </div>
+                        </article>
+                        {%  endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <form method="post">
+                <footer>
+			        <div class="zerogrid wrap-footer">
+			        	<div class="row">
+                             <div id='cssmenu-modified' class="align-center">
+                                <ul>
+                                   <a id="logout"><span>Logout</span></a>
+                                 </ul>
+                            </div>
+			        	</div>
+			        </div>
+		        </footer>
+            </form>
+        </div>
+    </body>
+</html>
+
+<script>
+    $(document).ready(function (e) {
+            $('#logout').on('click', (function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/user/logout",
+                    data : 'json',
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    processData: false,
+                    success: function (data) {
+                        window.location.href='/';
+                    },
+                    error: function (data) {
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
+                        location.reload();
+                    }
+                });
+            }));
+        });
+
+    $('#home').click(function() {
+        window.location.href = '/user/home';
+    });
+
+     $(document).ready(function (e) {
+            $('#student-enrollment').on('submit', (function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                var object = {};
+                formData.forEach(function(value, key){
+                    object[key] = value;
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/teacher/student-engagement",
+                    data: JSON.stringify(object),
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json",
+                    processData: false,
+                    success: function (data) {
+                        console.log("success");
+                        console.log(data);
+                        alert("Success");
+                        location.reload();
+                    },
+                    error: function (data) {
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
+                        location.reload();
+                    }
+                });
+            }));
+        });
+
+</script>

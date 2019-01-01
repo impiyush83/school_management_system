@@ -7,13 +7,14 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED, HTTP_200_OK, \
-    HTTP_409_CONFLICT, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED, HTTP_400_BAD_REQUEST
 
 from school_management_app.constants.common_constants import COOKIE_NAME, MASTER_KEY
 from school_management_app.constants.model_constants import UserType
+from school_management_app.constants.response_constants import SUCCESS, AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
+    USER_ALREADY_PRESENT
 from school_management_app.login import get_user
-from school_management_app.models import User
+from school_management_app.models import User, Subjects, UserSubjectEngagment
 from school_management_project import settings
 
 
@@ -43,24 +44,20 @@ def add_user(request):
         try:
             User.insert_user(data, UserType.TEACHER.value)
         except:
-            return Response({'message': 'User already present'},
-                            status=HTTP_409_CONFLICT)
+            return USER_ALREADY_PRESENT
 
     else:
         if data.get("type") == 'Parent':
             try:
                 User.insert_user(data, UserType.PARENT.value)
             except:
-                return Response({'message': 'User already present'},
-                                status=HTTP_409_CONFLICT)
+                return USER_ALREADY_PRESENT
         else:
             try:
                 User.insert_user(data, UserType.STUDENT.value)
             except:
-                return Response({'message': 'User already present'},
-                                status=HTTP_409_CONFLICT)
-    return Response({'message': 'Success'},
-                    status=HTTP_200_OK)
+                return USER_ALREADY_PRESENT
+    return SUCCESS
 
 
 @csrf_exempt
@@ -85,10 +82,8 @@ def user_login(request):
     payload = dict(user_id=user.id, username=user.username, exp=datetime.utcnow() + settings.JWT_COOKIE_EXPIRATION)
     # create payload of username, primary key which is id and expiration time.
     token = jwt.encode(payload, settings.SECRET_KEY).decode('utf-8')
-    response = Response({'message': 'Success'},
-                        status=HTTP_200_OK)
-    response.set_cookie(COOKIE_NAME, token)
-    return response
+    SUCCESS.set_cookie(COOKIE_NAME, token)
+    return SUCCESS
 
 
 @api_view(["GET"])
@@ -99,13 +94,11 @@ def render_homepage(request):
         try:
             data = jwt.decode(cookie, settings.SECRET_KEY)
         except:
-            return Response({'message': 'JWT Expired'},
-                            status=HTTP_401_UNAUTHORIZED)
+            return JWT_EXPIRED_COOKIE_ERROR
         user = User.objects.get(id=data.get('user_id'))
         return render(request, 'homepage.html', dict(user=user))
     else:
-        return Response({'message': 'Cookie not found'},
-                        status=HTTP_401_UNAUTHORIZED)
+        return AUTHENTICATION_ERROR
 
 
 @csrf_exempt
@@ -117,36 +110,68 @@ def user_logout(request):
         try:
             data = jwt.decode(cookie, settings.SECRET_KEY)
         except:
-            return Response({'message': 'JWT Expired'},
-                            status=HTTP_401_UNAUTHORIZED)
-        response = Response({'message': 'Success'},
-                            status=HTTP_200_OK)
-        response.set_cookie(COOKIE_NAME, expires=0)
-        return response
+            return JWT_EXPIRED_COOKIE_ERROR
+
+        SUCCESS.set_cookie(COOKIE_NAME, expires=0)
+        return SUCCESS
     else:
-        return Response({'message': 'Cookie not found'},
-                        status=HTTP_401_UNAUTHORIZED)
+        return AUTHENTICATION_ERROR
 
 
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def enroll_student(request):
-    import pdb
-    pdb.set_trace()
     if COOKIE_NAME in request.COOKIES:
         cookie = request.COOKIES[COOKIE_NAME]
         try:
             data = jwt.decode(cookie, settings.SECRET_KEY)
         except:
-            return Response({'message': 'JWT Expired'},
-                            status=HTTP_401_UNAUTHORIZED)
+            return JWT_EXPIRED_COOKIE_ERROR
         user = User.objects.get(id=data.get('user_id'))
         if user.type != 'TEACHER':
-            return Response({'message': 'NOT Authorized'},
+            return Response({'message': 'Only Authorized for teacher'},
                             status=HTTP_401_UNAUTHORIZED)
-
-        return render(request, 'enroll_student.html', {})
+        unenrolled_students = User.get_all_unenrolled_students()
+        enrolled_students = User.get_all_enrolled_students()
+        courses = Subjects.get_all_disctinct_courses()
+        return render(
+            request,
+            'enroll_student.html',
+            dict(
+                unenrolled_students=unenrolled_students,
+                enrolled_students=enrolled_students,
+                courses=courses
+            )
+        )
     else:
-        return Response({'message': 'Cookie not found'},
-                        status=HTTP_401_UNAUTHORIZED)
-    pass
+        return AUTHENTICATION_ERROR
+
+
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def engage_student(request):
+    request_data = request.body
+    request_data = request_data.decode('utf-8')
+    request_data = json.loads(request_data)
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return JWT_EXPIRED_COOKIE_ERROR
+        user = User.objects.get(id=data.get('user_id'))
+        if user.type != 'TEACHER':
+            return Response({'message': 'Only Authorized for teacher'},
+                            status=HTTP_401_UNAUTHORIZED)
+        try:
+            id = request_data.get('id')
+            course = request_data.get('course').split('->')[1]
+            course = course.strip()
+            UserSubjectEngagment.create_user_enrollment_entries(id, course)
+            User.objects.filter(id=id).update(enrolled=1)
+        except:
+            return Response({'message': 'Error while enrollment.'},
+                            status=HTTP_400_BAD_REQUEST)
+        return SUCCESS
+    else:
+        return AUTHENTICATION_ERROR

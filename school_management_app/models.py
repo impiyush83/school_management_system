@@ -1,6 +1,7 @@
 from django.db import models
-
 # Create your models here.
+from django.db.models import Q
+
 from school_management_app.constants.model_constants import UserType, AttendanceStatus, ExamStatus
 
 
@@ -14,6 +15,14 @@ class User(models.Model):
     enrolled = models.BooleanField(default=False, null=False)  # exclusively for students
 
     @classmethod
+    def get_all_unenrolled_students(cls):
+        return User.objects.filter(Q(enrolled=0) & Q(type='STUDENT')).order_by('id')
+
+    @classmethod
+    def get_all_enrolled_students(cls):
+        return User.objects.filter(Q(enrolled=1) & Q(type='STUDENT')).order_by('id')
+
+    @classmethod
     def insert_user(cls, data, user_type):
         user = User(name=data['name'], username=data['username'], password=data['password'], type=user_type)
         user.save()
@@ -25,19 +34,37 @@ class Subjects(models.Model):
     course = models.CharField(max_length=10, null=False)
     department = models.CharField(max_length=10, null=False)
 
+    @staticmethod
+    def get_all_disctinct_courses():
+        courses = []
+        all_records = Subjects.objects.all()
+        for record in all_records:
+            entry = str(record.department) + '->' + str(record.course)
+            if entry not in courses:
+                courses.append(entry)
+        return courses
+
 
 class Attendance(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     status = models.CharField(max_length=2, choices=[(tag, tag.value) for tag in AttendanceStatus], null=False)
-    subject_id = models.ForeignKey(Subjects, on_delete=models.CASCADE, null=True)
+    subject = models.ForeignKey(Subjects, on_delete=models.CASCADE, null=True)
 
 
 class UserSubjectEngagment(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
+
+    @staticmethod
+    def create_user_enrollment_entries(id, course):
+        user = User.objects.get(id=id)
+        subjects = Subjects.objects.filter(course=course)
+        for subject in subjects:
+            user_subject_engagment = UserSubjectEngagment(user=user, subject=subject)
+            user_subject_engagment.save()
 
 
 class ExamHistory(models.Model):

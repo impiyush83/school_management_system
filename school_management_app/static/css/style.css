@@ -174,15 +174,25 @@ article .entry-content p{color: #686868;font-size: 21px;}
 article .entry-content blockquote {border-left: 3px solid #1c7791;margin: 0 50px;font-style: italic;color: #666;padding-left: 20px;}
 article .entry-content ol {float: left;text-align: justify;margin: 10px 50px;list-style-type: circle;font-size: 21px;}
 
+
+article .entry-content-modified{text-align: right;}
+article.single-post .entry-content-modified{ padding: 40px 120px;}
+@media  (max-width: 540px){
+	article.single-post .entry-content-modified{ padding: 30px;}
+}
+article .entry-content-modified p{color: #686868;font-size: 21px;}
+article .entry-content-modified blockquote {border-left: 3px solid #1c7791;margin: 0 50px;font-style: italic;color: #666;padding-left: 20px;}
+article .entry-content-modified ol {float: left;text-align: justify;margin: 10px 50px;list-style-type: circle;font-size: 21px;}
+
 .comments-are textarea {height:170px;}
 
 /* ---------------------------------------------------------------------------- */
 /* -------------------------------------Footer--------------------------------- */
 /* ---------------------------------------------------------------------------- */
-footer{text-align: center;padding: 40px 0;border-top: 1px solid #bbb;margin-top: 40px;}
+footer{text-align: center;padding: 40px 0;border-top: 1px solid #bbb;margin-top: 1000px;}
 footer a{color:#444;font-weight: bold;}
 footer a:hover{color:#000;}
-footer .wrap-footer{color: #92907C;}
+footer .wrap-footer{color: black;}
 footer .wrap-footer ul li {margin-bottom: 5px;border-bottom: 1px solid #555;padding: 10px 0 15px;}
 footer i.fa{font-size: 22px;margin-right: 8px;}
 footer .bottom-social{margin-bottom: 20px;}

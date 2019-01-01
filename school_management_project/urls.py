@@ -23,7 +23,7 @@ urlpatterns = [
     path('/user/login/', include('school_management_app.urls')),
     path('/user/home/', include('school_management_app.urls')),
     path('/user/logout/', include('school_management_app.urls')),
-    path('/teacher/enroll_student/', include('school_management_app.urls')),
-
+    path('/teacher/enroll-student/', include('school_management_app.urls')),
+    path('/teacher/student-engagement/', include('school_management_app.urls')),
 ]
 
