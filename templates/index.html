@@ -62,14 +62,17 @@
 
     $("#radio1").click(function(){
         $("#master_key").show();
+        $("#master_key").prop('required',true);
     });
 
     $("#radio2").click(function(){
         $("#master_key").hide();
+        $("#master_key").prop('required',false);
     });
 
     $("#radio3").click(function(){
         $("#master_key").hide();
+        $("#master_key").prop('required',false);
     });
 
 
@@ -97,7 +100,7 @@
                         location.reload();
                     },
                     error: function (data) {
-                        alert("ERROR : " + data.status);
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
                         location.reload();
                     }
                 });
@@ -115,7 +118,7 @@
                 });
                 $.ajax({
                     type: 'POST',
-                    url: "user/login",
+                    url: "/user/login",
                     data: JSON.stringify(object),
                     datatype: 'json',
                     cache: false,

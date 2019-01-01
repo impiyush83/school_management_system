@@ -18,13 +18,29 @@
                     <div class="t-center">
                         <div id='cssmenu' class="align-center">
                             <ul>
-                               <li><a id="add_friend"><span>Add friend</span></a></li>
-                                <li><a id="enter_secret_key"><span>Enter Secret Key</span></a></li>
+                                {% if user.type == 'STUDENT' %}
+                                    <h2><li><a><span style="color:blue;">Hello Student {{ user.name }}</span></a></li> </h2>
+                                    <li><a id="view_attendance"><span>View Attendance</span></a></li>
+                                    <li><a id="view_exam_marks"><span>View Exam Marks</span></a></li>
+                                {% elif user.type == 'PARENT' %}
+                                    <h2><li><a><span style="color:green;">Hello Parent {{ user.name }}</span></a></li></h2>
+                                    <li><a id="link_student_account"><span>Link Your Student's Account</span></a></li>
+                                    <li><a id="view_attendance"><span>View Attendance</span></a></li>
+                                    <li><a id="view_exam_marks"><span>View Exam Marks</span></a></li>
+                                {% elif user.type == 'TEACHER' %}
+                                    <h2> <li><a><span style="color:red;">Hello Teacher {{ user.name }}</span></a></li></h2>
+                                    <li><a id="enroll_student"><span>Enroll Student</span></a></li>
+                                    <li><a id="mark_attendance"><span>Mark Attendance</span></a></li>
+                                    <li><a id="enter_exam_marks"><span>Enter Exam marks</span></a></li>
+                                    <li><a id="create_exam"><span>Create exam</span></a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
                 </div>
             </header>
+
+
             <form method="post">
                 <header>
                     <div>
@@ -39,6 +55,7 @@
                 </header>
             </form>
         </div>
+
     </body>
 </html>
 
@@ -64,8 +81,8 @@
             }));
         });
 
-    $('#create_secret_key').click(function() {
-        window.location.href = '/user/secret-key';
+    $('#enroll_student').click(function() {
+        window.location.href = '/teacher/enroll_student';
     });
 
     $('#add_friend').click(function() {
