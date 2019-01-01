@@ -3,13 +3,12 @@ import json
 import jwt
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils.datetime_safe import datetime
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
-from rest_framework_jwt.utils import jwt_payload_handler
-
 from school_management_app.constants.common_constants import COOKIE_NAME
 from school_management_app.constants.model_constants import UserType
 from school_management_app.login import check_authenticated
@@ -68,7 +67,8 @@ def user_login(request):
     if not user:
         return Response({'error': 'Invalid Credentials'},
                         status=HTTP_404_NOT_FOUND)
-    payload = jwt_payload_handler(user)
+    payload = dict(user_id=user.id, username=user.username, exp=datetime.utcnow() + settings.JWT_COOKIE_EXPIRATION)
+    # create payload of username, primary key which is id and expiration time.
     token = jwt.encode(payload, settings.SECRET_KEY)
     response = HttpResponse()
     response.set_cookie(COOKIE_NAME, token)
@@ -88,3 +88,16 @@ def render_homepage(request):
     else:
         return cookie_not_found("Authentication Error")
 
+
+@csrf_exempt
+def user_logout(request):
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        cookie = cookie[2:-1]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return decode_error("Authentication Error")
+        response = HttpResponse()
+        response.set_cookie(COOKIE_NAME, expires=0)
+        return response
