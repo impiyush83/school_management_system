@@ -31,19 +31,20 @@
                         <li>
                             <input name="username" type="text" placeholder="User Name" id="username" required>
                         </li>
-                        <li>
-                            <input name="master_key" type="text" placeholder="Master key only for teacher signup">
-                        </li>
+
                         <li>
                             <input name="password" type="password" placeholder="New password" required>
                         </li>
                         <li>User type:</li>
                         <li>
-                            <input name="type" onclick="master_key()" type="radio" value="Teacher" required>Teacher
+                            <input name="type" id="radio1"  type="radio" value="Teacher" required>Teacher
                             <br>
-                            <input name="type" onclick="master_key()" type="radio" value="Parent" required>Parent
+                            <input name="type"  id="radio2"  type="radio" value="Parent" required>Parent
                             <br>
-                            <input name="type" onclick="master_key()" type="radio" value="Student" required>Student
+                            <input name="type"  id="radio3"  type="radio" value="Student" required>Student
+                        </li>
+                        <li>
+                            <input id="master_key" style="display:none;" name="master_key" type="text" placeholder="Master key only for teacher signup">
                         </li>
                          <br>
                         <li>
@@ -58,6 +59,20 @@
 
 
 <script>
+
+    $("#radio1").click(function(){
+        $("#master_key").show();
+    });
+
+    $("#radio2").click(function(){
+        $("#master_key").hide();
+    });
+
+    $("#radio3").click(function(){
+        $("#master_key").hide();
+    });
+
+
 
     $(document).ready(function (e) {
             $('#add_user').on('submit', (function (e) {
