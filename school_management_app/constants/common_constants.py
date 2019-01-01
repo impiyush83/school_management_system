@@ -1,1 +1,2 @@
 MASTER_KEY = "SECRET-KEY"
+COOKIE_NAME = 'cookie'

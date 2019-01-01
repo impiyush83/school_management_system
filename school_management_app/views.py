@@ -1,32 +1,24 @@
 import json
 
 import jwt
-from rest_framework import status
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate, user_logged_in
 from django.http import HttpResponse
 from django.shortcuts import render
-
-# Create your views here.
-from django.template import RequestContext
-
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from rest_framework_jwt.utils import jwt_payload_handler
 
+from school_management_app.constants.common_constants import COOKIE_NAME
 from school_management_app.constants.model_constants import UserType
 from school_management_app.login import check_authenticated
 from school_management_app.models import User
-from django.core.exceptions import (
-    NON_FIELD_ERRORS, FieldDoesNotExist, FieldError, MultipleObjectsReturned,
-    ObjectDoesNotExist, ValidationError,
-)
-
-from school_management_app.responses import bad_request, resource_conflict
+from school_management_app.responses import bad_request, resource_conflict, decode_error, cookie_not_found
 from school_management_project import settings
+
+
+# Create your views here.
 
 
 def index(request):
@@ -78,9 +70,21 @@ def user_login(request):
                         status=HTTP_404_NOT_FOUND)
     payload = jwt_payload_handler(user)
     token = jwt.encode(payload, settings.SECRET_KEY)
-    user_details = {}
-    user_details['name'] = "%s" % (user.name)
-    user_details['id'] = user.id
-    user_details['type'] = user.type
-    user_details['token'] = token
-    return Response(user_details, status=status.HTTP_200_OK)
+    response = HttpResponse()
+    response.set_cookie(COOKIE_NAME, token)
+    return response
+
+
+def render_homepage(request):
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        cookie = cookie[2:-1]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return decode_error("Authentication Error")
+        user = User.objects.get(id=data.get('user_id'))
+        return render(request, 'homepage.html', dict(user=user))
+    else:
+        return cookie_not_found("Authentication Error")
+

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>Home</title>
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/zerogrid.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/menu.css') }}">
-        <script src="{{ url_for('static',filename='js/jquery1111.min.js') }}" type="text/javascript"></script>
-        <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-        <link href="{{ url_for('static',filename='css/owl.carousel.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/zerogrid.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <script src="{% static 'js/jquery1111.min.js' %}" type="text/javascript"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+        <link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet">
     </head>
     <body>
         <div class="wrap-body">
@@ -18,49 +19,12 @@
                         <div id='cssmenu' class="align-center">
                             <ul>
                                <li><a id="add_friend"><span>Add friend</span></a></li>
-                                <!--{% if not is_secret_key %}-->
-                                <!--<li><a id="create_secret_key"><span>Create Secret Key</span></a></li>-->
-                                <!--{% endif %}-->
                                 <li><a id="enter_secret_key"><span>Enter Secret Key</span></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </header>
-            <!--<section id="container">-->
-                <!--<div class="wrap-container">-->
-                    <!--<div class="zerogrid">-->
-                        <!--<article>-->
-                            <!--<div class="row wrap-post">-->
-                                <!--<div class="entry-header">-->
-                                        <!--<h2 class="entry-title">Your Sharable Secret Key :<p style="color:red;">{% if  is_secret_key %} {{secret_key}} {% else %} Not yet created {% endif %} </p></h2>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--{%   for i in range(len)  %}-->
-
-                        <!--<article>-->
-                            <!--<div class="row wrap-post">-->
-                                <!--<div class="entry-header">-->
-                                    <!--<h2 class="entry-title">Friend {{ i+1 }} : {{ friends[i]['first_name']}} {{ friends[i]['last_name'] }}</h2>-->
-                                <!--</div>-->
-                                <!--<div class="entry-content">-->
-                                    <!--<br>-->
-                                    <!--<p>-->
-                                        <!--<br> Favourite Color   :  {{ friends[i]['favourite_color'] }}<br>-->
-                                        <!--<br> Favourite Food   :  {{ friends[i]['favourite_food'] }}<br>-->
-                                        <!--<br> Favourite Song   :  {{ friends[i]['favourite_song'] }}<br>-->
-                                         <!--<br> Email  :  {{ friends[i]['email'] }}<br>-->
-                                        <!--<br> Phone no   :  {{ friends[i]['mobile'] }}<br>-->
-                                    <!--</p>-->
-                                    <!--<br>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--{%  endfor %}-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</section>-->
             <form method="post">
                 <header>
                     <div>
