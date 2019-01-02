@@ -31,8 +31,8 @@
                                     <h2> <li><a><span style="color:red;">Teacher Dashboard</span></a></li></h2>
                                     <li><a id="enroll_student"><span>Enroll Student</span></a></li>
                                     <li><a id="mark_attendance"><span>Mark Attendance</span></a></li>
-                                    <li><a id="enter_exam_marks"><span>Enter Exam marks</span></a></li>
                                     <li><a id="create_exam"><span>Create exam</span></a></li>
+                                    <li><a id="finish_exam"><span>Finish exam</span></a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -88,7 +88,8 @@
         window.location.href = '/teacher/exams/';
     });
 
-    $('#enter_secret_key').click(function() {
-        window.location.href = '/user/enter-secret-key/';
+    $('#finish_exam').click(function() {
+        window.location.href = '/teacher/active-exams/';
     });
+
 </script>

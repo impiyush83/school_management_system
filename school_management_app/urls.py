@@ -12,4 +12,6 @@ urlpatterns = [
     path('teacher/student-engagement/', views.engage_student, name='engage_students'),
     path('teacher/exams/', views.create_exams, name='create-exams-dashboard'),
     path('teacher/exam/add/', views.insert_exam, name='create-exams'),
+    path('teacher/active-exams/', views.close_active_exams_dashboard, name='close-active-exam-dashboard'),
+    path('teacher/exam/finish/', views.close_active_exams, name='close-active-exam'),
 ]

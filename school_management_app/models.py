@@ -63,6 +63,7 @@ class Attendance(models.Model):
 
 class UserSubjectEngagment(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
+    created = models.DateField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
 
@@ -77,6 +78,7 @@ class UserSubjectEngagment(models.Model):
 
 class ExamHistory(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
+    created = models.DateField(auto_now_add=True)
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
     status = models.CharField(max_length=2, choices=[(tag, tag.value) for tag in ExamStatus], null=False)
 
@@ -85,9 +87,19 @@ class ExamHistory(models.Model):
         return ExamHistory.objects.filter(status=ExamStatus.ACTIVE)
 
     @staticmethod
+    def get_expired_exams():
+        return ExamHistory.objects.filter(status=ExamStatus.EXPIRED)
+
+    @staticmethod
     def insert_exam(subject):
-        exam = ExamHistory(subject=subject, status= ExamStatus.ACTIVE)
+        exam = ExamHistory(subject=subject, status=ExamStatus.ACTIVE)
         exam.save()
+
+    @staticmethod
+    def finish_exam(subject):
+        exams_to_finish = ExamHistory.objects.filter(subject=subject)
+        for exam in exams_to_finish:
+            ExamHistory.objects.filter(subject=subject).update(status=ExamStatus.EXPIRED)
 
 
 class StudentExamMarksRecords(models.Model):

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <style>
+            .button {
+              background-color: #4CAF50;
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+
+             .button1 {
+              background-color:  #d1d1e0;
+              border: none;
+              color: red;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+
+        </style>
+        <meta charset="utf-8">
+        <title>Home</title>
+        <link rel="stylesheet" href="{% static 'css/zerogrid.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <script src="{% static 'js/jquery1111.min.js' %}" type="text/javascript"></script>
+        <script src="{% static 'js/script.js' %}"></script>
+        <link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrap-body">
+            <header class="main-header">
+                <div class="zerogrid">
+                    <div class="t-center">
+                        <div id='cssmenu' class="align-center">
+                            <ul>
+                                <li><a id="home"><span>Home</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <section id="container">
+                <div class="wrap-container">
+                    <div class="zerogrid">
+                        <article>
+                            <div class="row wrap-post">
+                                <div class="entry-header">
+                                        <h2 class="entry-title" style="color:#cc0000;"> ACTIVE EXAMS : </h2>
+                                </div>
+                            </div>
+                        </article>
+                        {% for subject in subjects %}
+                        <form method="post" id="finish_exam">
+                             <br>
+                             <article>
+                                    <h2> Subject ( {{ subject.name }}) <  Course( {{ subject.course }} )
+                                        <  Department( {{ subject.department }} ) </h2>
+                                    <input type="text" name="id" value="{{ subject.id }}" style="display:none">
+                                    <input type="submit"  class="button" value="Finish Exam">
+                            </article>
+                         </form>
+                        <hr>
+                        {% endfor %}
+                        <br>
+
+                        <article>
+                            <div class="row wrap-post">
+                                <div class="entry-header">
+                                        <h2 class="entry-title" style="color:#cc0000;"> EXPIRED EXAMS: </h2>
+                                </div>
+                            </div>
+                        </article>
+                        <br>
+                        {% for exam in expired_exams %}
+                             <article>
+                                    <h2> {{ exam.id }}   -  Subject ( {{ exam.subject.name }}) <  Course( {{ exam.subject.course }} )
+                                        <  Department( {{ exam.subject.department }} )</h2>
+                                 <h2 style="color:red;"> Created at {{ exam.created }} </h2>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <form method="post">
+                <footer>
+			        <div class="zerogrid wrap-footer">
+			        	<div class="row">
+                             <div id='cssmenu-modified' class="align-center">
+                                <ul>
+                                   <a id="logout"><span>Logout</span></a>
+                                 </ul>
+                            </div>
+			        	</div>
+			        </div>
+		        </footer>
+            </form>
+        </div>
+    </body>
+</html>
+
+<script>
+    $(document).ready(function (e) {
+            $('#logout').on('click', (function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/user/logout/",
+                    data : 'json',
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    processData: false,
+                    success: function (data) {
+                        window.location.href='/';
+                    },
+                    error: function (data) {
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
+                        location.reload();
+                    }
+                });
+            }));
+        });
+
+    $('#home').click(function() {
+        window.location.href = '/user/home/';
+    });
+
+
+     $(document).ready(function (e) {
+            $('#finish_exam').on('submit', (function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                var object = {};
+                formData.forEach(function(value, key){
+                    alert(value);
+                    object[key] = value;
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: "/teacher/exam/finish/",
+                    data: JSON.stringify(object),
+                    datatype: 'json',
+                    cache: false,
+                    contentType: "application/json",
+                    processData: false,
+                    success: function (data) {
+                        console.log("success");
+                        console.log(data);
+                        alert("Success");
+                        location.reload();
+                    },
+                    error: function (data) {
+                        alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);
+                        location.reload();
+                    }
+                });
+            }));
+        });
+
+</script>

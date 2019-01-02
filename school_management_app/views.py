@@ -197,8 +197,8 @@ def create_exams(request):
             request,
             'create_exam.html',
             dict(
-               subjects=subjects,
-               active_examination_subjects=active_examination_subjects
+                subjects=subjects,
+                active_examination_subjects=active_examination_subjects
             )
         )
     else:
@@ -233,3 +233,63 @@ def insert_exam(request):
     else:
         return AUTHENTICATION_ERROR
 
+
+@api_view(["GET"])
+@permission_classes((AllowAny,))
+def close_active_exams_dashboard(request):
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return JWT_EXPIRED_COOKIE_ERROR
+        user = User.objects.get(id=data.get('user_id'))
+        if user.type != 'TEACHER':
+            return Response({'message': 'Only Authorized for teacher'},
+                            status=HTTP_401_UNAUTHORIZED)
+        active_exams = ExamHistory.get_active_exams()
+        subjects = []
+        for exam in active_exams:
+            subject = Subjects.with_id(exam.subject_id)[0]
+            subjects.append(subject)
+        expired_exams = ExamHistory.get_expired_exams()
+        return render(
+            request,
+            'finish_exam.html',
+            dict(
+                subjects=subjects,
+                expired_exams=expired_exams
+            )
+        )
+    else:
+        return AUTHENTICATION_ERROR
+
+
+
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def close_active_exams(request):
+    request_data = request.body
+    request_data = request_data.decode('utf-8')
+    request_data = json.loads(request_data)
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return JWT_EXPIRED_COOKIE_ERROR
+        user = User.objects.get(id=data.get('user_id'))
+        if user.type != 'TEACHER':
+            return Response({'message': 'Only Authorized for teacher'},
+                            status=HTTP_401_UNAUTHORIZED)
+        try:
+            subject_id = request_data.get('id')
+            subject = Subjects.with_id(subject_id)
+            ExamHistory.finish_exam(subject[0])
+        except:
+            return Response({'message': 'Error while enrollment !! DB ERROR !! '},
+                            status=HTTP_409_CONFLICT)
+
+        return SUCCESS
+    else:
+        return AUTHENTICATION_ERROR
