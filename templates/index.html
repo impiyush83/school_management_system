@@ -87,7 +87,7 @@
                 });
                 $.ajax({
                     type: 'POST',
-                    url: "/user/signup",
+                    url: "/user/signup/",
                     data: JSON.stringify(object),
                     datatype: 'json',
                     cache: false,
@@ -118,14 +118,14 @@
                 });
                 $.ajax({
                     type: 'POST',
-                    url: "/user/login",
+                    url: "/user/login/",
                     data: JSON.stringify(object),
                     datatype: 'json',
                     cache: false,
                     contentType: "application/json",
                     processData: false,
                     success: function (data) {
-                        window.location.href='user/home';
+                        window.location.href='user/home/';
                     },
                     error: function (data) {
                         alert("ERROR " + data.status + " " + data.statusText + " : "+data.responseJSON.message);

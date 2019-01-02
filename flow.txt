@@ -33,3 +33,10 @@ All the subjects migrated into the table in data migration. Backward compatible.
 
 Sha-256 password.
 Show course of enrolled students in enrolled-students in teacher/enroll-student.
+
+
+
+------ learning ------
+
+
+1. url vs path -> path is just newer -> url is re_path. path with regex.

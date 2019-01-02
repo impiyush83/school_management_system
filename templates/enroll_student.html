@@ -155,7 +155,7 @@
             $('#logout').on('click', (function (e) {
                 $.ajax({
                     type: 'POST',
-                    url: "/user/logout",
+                    url: "/user/logout/",
                     data : 'json',
                     datatype: 'json',
                     cache: false,
@@ -173,7 +173,7 @@
         });
 
     $('#home').click(function() {
-        window.location.href = '/user/home';
+        window.location.href = '/user/home/';
     });
 
      $(document).ready(function (e) {
@@ -187,7 +187,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/teacher/student-engagement",
+                    url: "/teacher/student-engagement/",
                     data: JSON.stringify(object),
                     datatype: 'json',
                     cache: false,
