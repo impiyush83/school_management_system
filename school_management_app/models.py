@@ -81,6 +81,7 @@ class ExamHistory(models.Model):
     created = models.DateField(auto_now_add=True)
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
     status = models.CharField(max_length=2, choices=[(tag, tag.value) for tag in ExamStatus], null=False)
+    marks_entered = models.BooleanField(null=False, default=0)
 
     @staticmethod
     def get_active_exams():

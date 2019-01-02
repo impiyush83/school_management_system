@@ -176,7 +176,7 @@ def engage_student(request):
         return AUTHENTICATION_ERROR
 
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 @permission_classes((AllowAny,))
 def create_exams(request):
     if COOKIE_NAME in request.COOKIES:
@@ -263,7 +263,6 @@ def close_active_exams_dashboard(request):
         )
     else:
         return AUTHENTICATION_ERROR
-
 
 
 @api_view(["POST"])

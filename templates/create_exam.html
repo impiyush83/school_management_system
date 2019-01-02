@@ -66,6 +66,7 @@
                         <form method="post" id="create_exam">
                             <br>
                              <article>
+                                    <h2 style="color:red;"> Subject ID : {{ subject.id }} </h2>
                                     <h2> Subject ( {{ subject.name }}) <  Course( {{ subject.course }} )
                                         <  Department( {{ subject.department }} ) </h2>
                                     <input type="text" name="id" value="{{ subject.id }}" style="display:none">
@@ -133,7 +134,6 @@
                 var formData = new FormData(this);
                 var object = {};
                 formData.forEach(function(value, key){
-                    alert(value);
                     object[key] = value;
                 });
                 $.ajax({

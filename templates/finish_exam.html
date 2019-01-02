@@ -63,7 +63,7 @@
                             </div>
                         </article>
                         {% for subject in subjects %}
-                        <form method="post" id="finish_exam">
+                        <form method="post" id="close_exam">
                              <br>
                              <article>
                                     <h2> Subject ( {{ subject.name }}) <  Course( {{ subject.course }} )
@@ -85,11 +85,19 @@
                         </article>
                         <br>
                         {% for exam in expired_exams %}
+                         <form method="post" id="enter_marks">
+                             <br>
                              <article>
                                     <h2> {{ exam.id }}   -  Subject ( {{ exam.subject.name }}) <  Course( {{ exam.subject.course }} )
                                         <  Department( {{ exam.subject.department }} )</h2>
                                  <h2 style="color:red;"> Created at {{ exam.created }} </h2>
+                                 <br>
+                                 {% if not exam.marks_entered %}
+                                    <input type="submit"  class="button" value="Enter marks" disabled>
+                                {% endif %}
                             </article>
+                         </form>
+
                         {% endfor %}
                     </div>
                 </div>
@@ -138,14 +146,17 @@
         window.location.href = '/user/home/';
     });
 
+    $('#enter_marks').click(function() {
+        window.location.href = '/teacher/exam/marks';
+    });
+
 
      $(document).ready(function (e) {
-            $('#finish_exam').on('submit', (function (e) {
+            $('#close_exam').on('submit', (function (e) {
                 e.preventDefault();
                 var formData = new FormData(this);
                 var object = {};
                 formData.forEach(function(value, key){
-                    alert(value);
                     object[key] = value;
                 });
                 $.ajax({
@@ -170,4 +181,8 @@
             }));
         });
 
+
+
 </script>
+
+<!--  remaining create enter marks page -->
