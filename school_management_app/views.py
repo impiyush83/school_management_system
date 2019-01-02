@@ -14,7 +14,7 @@ from school_management_app.constants.model_constants import UserType
 from school_management_app.constants.response_constants import SUCCESS, AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
     USER_ALREADY_PRESENT, DOES_NOT_EXIST_ERROR
 from school_management_app.login import get_user
-from school_management_app.models import User, Subjects, UserSubjectEngagment, ExamHistory
+from school_management_app.models import User, Subjects, UserSubjectEngagment, ExamHistory, StudentExamRecords
 from school_management_app.util import get_subject_id_from_active_exams
 from school_management_project import settings
 
@@ -223,8 +223,11 @@ def insert_exam(request):
                             status=HTTP_401_UNAUTHORIZED)
         try:
             subject_id = request_data.get('id')
-            subject = Subjects.with_id(subject_id)
-            ExamHistory.insert_exam(subject[0])
+            subject = Subjects.with_id(subject_id)[0]
+            ExamHistory.insert_active_exam(subject)
+            students_appearing_for_exam = UserSubjectEngagment.get_all_students_enrolled_with_subject_id(subject)
+            exam = ExamHistory.get_active_exams_with_subject_id(subject)[0]
+            StudentExamRecords.add_entries(students_appearing_for_exam, exam)
         except:
             return Response({'message': 'Error while enrollment !! DB ERROR !! '},
                             status=HTTP_409_CONFLICT)
@@ -283,8 +286,8 @@ def close_active_exams(request):
                             status=HTTP_401_UNAUTHORIZED)
         try:
             subject_id = request_data.get('id')
-            subject = Subjects.with_id(subject_id)
-            ExamHistory.finish_exam(subject[0])
+            subject = Subjects.with_id(subject_id)[0]
+            ExamHistory.finish_exam(subject)
         except:
             return Response({'message': 'Error while enrollment !! DB ERROR !! '},
                             status=HTTP_409_CONFLICT)

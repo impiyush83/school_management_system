@@ -75,6 +75,10 @@ class UserSubjectEngagment(models.Model):
             user_subject_engagment = UserSubjectEngagment(user=user, subject=subject)
             user_subject_engagment.save()
 
+    @staticmethod
+    def get_all_students_enrolled_with_subject_id(subject):
+        return UserSubjectEngagment.objects.filter(subject=subject)
+
 
 class ExamHistory(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
@@ -92,9 +96,13 @@ class ExamHistory(models.Model):
         return ExamHistory.objects.filter(status=ExamStatus.EXPIRED)
 
     @staticmethod
-    def insert_exam(subject):
+    def insert_active_exam(subject):
         exam = ExamHistory(subject=subject, status=ExamStatus.ACTIVE)
         exam.save()
+
+    @staticmethod
+    def get_active_exams_with_subject_id(subject):
+        return ExamHistory.objects.filter(Q(status=ExamStatus.ACTIVE) & Q(subject=subject))
 
     @staticmethod
     def finish_exam(subject):
@@ -103,12 +111,18 @@ class ExamHistory(models.Model):
             ExamHistory.objects.filter(subject=subject).update(status=ExamStatus.EXPIRED)
 
 
-class StudentExamMarksRecords(models.Model):
+class StudentExamRecords(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     exam = models.ForeignKey(ExamHistory, on_delete=models.CASCADE)
     marks = models.IntegerField(null=False, default=-1)
     outof = models.IntegerField(default=100)
+
+    @staticmethod
+    def add_entries(users, exam):
+        for user in users:
+            record = StudentExamRecords(user_id=user.user_id, exam=exam)
+            record.save()
 
 # filter returns querysets
 # get returns objects -> returns error if nothing found.
