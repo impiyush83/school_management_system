@@ -1,7 +1,8 @@
 1. Teacher
 
 - Can signup and login with master key
-- Can enroll student to subject particular subject
+- Can enroll student to subject particular subject / considering teacher as admin.
+- Can create exam.
 
 
 2. Parent
@@ -12,9 +13,7 @@
 
 3. Student
 
-- Can signup and login
-
-
+- Can signup and login.
 
 
 2 Dept :
@@ -25,3 +24,12 @@ CS  -- IT    | Medicine, Dental
 ML, NLP -- Web Development, Software Engineering  |  MedSub1, MedSub2 -- DentalSub1, DentalSub2
 
 All the subjects migrated into the table in data migration. Backward compatible.
+
+
+
+
+----------Modifications--------
+
+
+Sha-256 password.
+Show course of enrolled students in enrolled-students in teacher/enroll-student.

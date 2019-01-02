@@ -15,37 +15,6 @@
               margin: 4px 2px;
               cursor: pointer;
             }
-            .styled-select {
-               background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
-               height: 29px;
-               overflow: hidden;
-               width: 100%;
-            }
-
-            .styled-select select {
-               background: transparent;
-               border: none;
-               font-size: 14px;
-               height: 29px;
-               padding: 5px; /* If you add too much padding here, the options won't show in IE */
-               width: 100%;
-            }
-
-            .mycolor   { background-color: #0066cc; }
-
-            .semi-square {
-               -webkit-border-radius: 5px;
-               -moz-border-radius: 5px;
-               border-radius: 5px;
-            }
-
-
-            .styled-select.slate select {
-               border: 1px solid #ccc;
-               font-size: 16px;
-               height: 34px;
-               width: 100%;
-            }
 
         </style>
         <meta charset="utf-8">
@@ -73,62 +42,32 @@
             <section id="container">
                 <div class="wrap-container">
                     <div class="zerogrid">
-
                         <article>
                             <div class="row wrap-post">
                                 <div class="entry-headert">
-                                        <h2 class="entry-title" style="color:#cc0000;"> Unenrolled students list : </h2>
+                                        <h2 class="entry-title" style="color:#cc0000;"> Select Subject to create exam : </h2>
+                                </div>
+                            </div>
+                        </article>
+                        {% for subject in subjects %}
+                        <form method="post" id="create_exam">
+                            <br>
+                             <article>
+                                    <h2> Subject ( {{ subject.name }}) <  Course( {{ subject.course }} )
+                                        <  Department( {{ subject.department }} ) </h2>
+                                    <input type="text" name="id" value="{{ subject.id }}" style="display:none">
+                                    <input type="submit"  class="button" value="Create Exam">
+                            </article>
+                         </form>
+                        {% endfor %}
+                         <article>
+                            <div class="row wrap-post">
+                                <div class="entry-headert">
+                                        <h2 class="entry-title" style="color:#cc0000;"> Select Subject to create exam : </h2>
                                 </div>
                             </div>
                         </article>
                         <br>
-                        {%   for student in unenrolled_students  %}
-                         <form method="post" id="student-enrollment">
-                        <article>
-                            <div class="row wrap-post">
-                                <div class="entry-header">
-                                    <h2 class="entry-title"  style="color:red;"> ID : {{ student.id }}  </h2>
-                                </div>
-                                 <div class="entry-header">
-                                     <h2 class="entry-title" style="color:red;"> Name :  {{ student.name }} </h2>
-                                </div>
-                            </div>
-
-                                <div class="styled-select mycolor semi-square">
-                                     <select name="course" class="selection" required>
-                                        {% for course in courses %}
-                                             <option>{{ course }}</option>
-                                        {% endfor %}
-                                     </select>
-                                </div>
-                                <input type="text" name="id" value="{{ student.id }}" style="display:none">
-                                <input type="submit"  class="button" value="Enroll Student">
-                        </article>
-                               </form>
-                            {%  endfor %}
-
-
-
-                        <article>
-                            <div class="row wrap-post">
-                                <div class="entry-header">
-                                        <h2 class="entry-title" style="color:#00264d;"> Enrolled students list : </h2>
-                                </div>
-                            </div>
-                        </article>
-                        <br>
-                        {%   for student in enrolled_students  %}
-                        <article>
-                            <div class="row wrap-post">
-                                <div class="entry-header">
-                                    <h2 class="entry-title"  style="color:#004080;"> ID : {{ student.id }}  </h2>
-                                </div>
-                                 <div class="entry-header">
-                                     <h2 class="entry-title" style="color:#004080;"> Name :  {{ student.name }} </h2>
-                                </div>
-                            </div>
-                        </article>
-                        {%  endfor %}
                     </div>
                 </div>
             </section>
@@ -155,7 +94,7 @@
             $('#logout').on('click', (function (e) {
                 $.ajax({
                     type: 'POST',
-                    url: "/user/logout",
+                    url: "/user/logout/",
                     data : 'json',
                     datatype: 'json',
                     cache: false,
@@ -173,21 +112,22 @@
         });
 
     $('#home').click(function() {
-        window.location.href = '/user/home';
+        window.location.href = '/user/home/';
     });
 
+
      $(document).ready(function (e) {
-            $('#student-enrollment').on('submit', (function (e) {
+            $('#create_exam').on('submit', (function (e) {
                 e.preventDefault();
                 var formData = new FormData(this);
                 var object = {};
                 formData.forEach(function(value, key){
+                    alert(value);
                     object[key] = value;
                 });
-
                 $.ajax({
                     type: 'POST',
-                    url: "/teacher/student-engagement",
+                    url: "/teacher/exam/add/",
                     data: JSON.stringify(object),
                     datatype: 'json',
                     cache: false,

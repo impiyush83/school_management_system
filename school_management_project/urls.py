@@ -25,5 +25,7 @@ urlpatterns = [
     path('/user/logout/', include('school_management_app.urls')),
     path('/teacher/enroll-student/', include('school_management_app.urls')),
     path('/teacher/student-engagement/', include('school_management_app.urls')),
+    path('/teacher/exams/', include('school_management_app.urls')),
+    path('/teacher/exams/add', include('school_management_app.urls')),
 ]
 

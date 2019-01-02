@@ -35,7 +35,7 @@ class Subjects(models.Model):
     department = models.CharField(max_length=10, null=False)
 
     @staticmethod
-    def get_all_disctinct_courses():
+    def get_all_disctinct_courses_and_departments():
         courses = []
         all_records = Subjects.objects.all()
         for record in all_records:
@@ -43,6 +43,10 @@ class Subjects(models.Model):
             if entry not in courses:
                 courses.append(entry)
         return courses
+
+    @staticmethod
+    def get_all_subjects():
+        return Subjects.objects.all()  # returns queryset
 
 
 class Attendance(models.Model):
@@ -73,8 +77,15 @@ class ExamHistory(models.Model):
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
     status = models.CharField(max_length=2, choices=[(tag, tag.value) for tag in ExamStatus], null=False)
 
+    @staticmethod
+    def get_active_exams():
+        return ExamHistory.objects.filter(status="ACTIVE")
+
 
 class StudentExamMarksRecords(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     exam = models.ForeignKey(ExamHistory, on_delete=models.CASCADE)
+
+# filter returns querysets
+# get returns objects -> returns error if nothing found.
