@@ -48,6 +48,10 @@ class Subjects(models.Model):
     def get_all_subjects():
         return Subjects.objects.all()  # returns queryset
 
+    @staticmethod
+    def with_id(id):
+        return Subjects.objects.filter(id=id)
+
 
 class Attendance(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
@@ -73,19 +77,25 @@ class UserSubjectEngagment(models.Model):
 
 class ExamHistory(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
     status = models.CharField(max_length=2, choices=[(tag, tag.value) for tag in ExamStatus], null=False)
 
     @staticmethod
     def get_active_exams():
-        return ExamHistory.objects.filter(status="ACTIVE")
+        return ExamHistory.objects.filter(status=ExamStatus.ACTIVE)
+
+    @staticmethod
+    def insert_exam(subject):
+        exam = ExamHistory(subject=subject, status= ExamStatus.ACTIVE)
+        exam.save()
 
 
 class StudentExamMarksRecords(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     exam = models.ForeignKey(ExamHistory, on_delete=models.CASCADE)
+    marks = models.IntegerField(null=False, default=-1)
+    outof = models.IntegerField(default=100)
 
 # filter returns querysets
 # get returns objects -> returns error if nothing found.

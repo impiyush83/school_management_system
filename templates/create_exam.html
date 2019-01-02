@@ -16,6 +16,19 @@
               cursor: pointer;
             }
 
+             .button1 {
+              background-color:  #d1d1e0;
+              border: none;
+              color: red;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+
         </style>
         <meta charset="utf-8">
         <title>Home</title>
@@ -44,7 +57,7 @@
                     <div class="zerogrid">
                         <article>
                             <div class="row wrap-post">
-                                <div class="entry-headert">
+                                <div class="entry-header">
                                         <h2 class="entry-title" style="color:#cc0000;"> Select Subject to create exam : </h2>
                                 </div>
                             </div>
@@ -56,17 +69,15 @@
                                     <h2> Subject ( {{ subject.name }}) <  Course( {{ subject.course }} )
                                         <  Department( {{ subject.department }} ) </h2>
                                     <input type="text" name="id" value="{{ subject.id }}" style="display:none">
+                                 {% if  subject.id  in active_examination_subjects %}
+                                    <input type="submit"  class="button1" value="Active exam ongoing. Finish Exam to create new exam." disabled>
+                                {% else %}
                                     <input type="submit"  class="button" value="Create Exam">
+                                 {% endif %}
                             </article>
                          </form>
+                        <hr>
                         {% endfor %}
-                         <article>
-                            <div class="row wrap-post">
-                                <div class="entry-headert">
-                                        <h2 class="entry-title" style="color:#cc0000;"> Select Subject to create exam : </h2>
-                                </div>
-                            </div>
-                        </article>
                         <br>
                     </div>
                 </div>

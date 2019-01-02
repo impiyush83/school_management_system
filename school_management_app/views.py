@@ -192,12 +192,13 @@ def create_exams(request):
 
         subjects = Subjects.get_all_subjects()
         active_exams = ExamHistory.get_active_exams()
-        get_subject_id_from_active_exams(active_exams)
+        active_examination_subjects = get_subject_id_from_active_exams(active_exams)
         return render(
             request,
             'create_exam.html',
             dict(
-               subjects=subjects
+               subjects=subjects,
+               active_examination_subjects=active_examination_subjects
             )
         )
     else:
@@ -222,9 +223,8 @@ def insert_exam(request):
                             status=HTTP_401_UNAUTHORIZED)
         try:
             subject_id = request_data.get('id')
-            import pdb
-            pdb.set_trace()
-            User.objects.filter(id=id).update(enrolled=1)
+            subject = Subjects.with_id(subject_id)
+            ExamHistory.insert_exam(subject[0])
         except:
             return Response({'message': 'Error while enrollment !! DB ERROR !! '},
                             status=HTTP_409_CONFLICT)
