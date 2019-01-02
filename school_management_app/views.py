@@ -295,3 +295,27 @@ def close_active_exams(request):
         return SUCCESS
     else:
         return AUTHENTICATION_ERROR
+
+
+@api_view(["GET"])
+@permission_classes((AllowAny,))
+def assign_exam_marks_dashboard(request):
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return JWT_EXPIRED_COOKIE_ERROR
+        user = User.objects.get(id=data.get('user_id'))
+        if user.type != 'TEACHER':
+            return Response({'message': 'Only Authorized for teacher'},
+                            status=HTTP_401_UNAUTHORIZED)
+
+        return render(
+            request,
+            'assign_marks.html',
+            dict(
+            )
+        )
+    else:
+        return AUTHENTICATION_ERROR
