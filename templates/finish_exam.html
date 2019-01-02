@@ -92,12 +92,8 @@
                                         <  Department( {{ exam.subject.department }} )</h2>
                                  <h2 style="color:red;"> Created at {{ exam.created }} </h2>
                                  <br>
-                                 {% if not exam.marks_entered %}
-                                    <input type="submit"  class="button" value="Enter marks" disabled>
-                                {% endif %}
                             </article>
                          </form>
-
                         {% endfor %}
                     </div>
                 </div>
@@ -146,9 +142,6 @@
         window.location.href = '/user/home/';
     });
 
-    $('#enter_marks').click(function() {
-        window.location.href = '/teacher/exam/marks';
-    });
 
      $(document).ready(function (e) {
             $('#close_exam').on('submit', (function (e) {
@@ -179,8 +172,6 @@
                 });
             }));
         });
-
-
 
 </script>
 

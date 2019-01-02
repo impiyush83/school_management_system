@@ -31,7 +31,8 @@
                                     <h2> <li><a><span style="color:red;">Teacher Dashboard</span></a></li></h2>
                                     <li><a id="enroll_student"><span>Enroll Student</span></a></li>
                                     <li><a id="create_exam"><span>Create exams</span></a></li>
-                                    <li><a id="finish_exam"><span>Active exams</span></a></li>
+                                    <li><a id="finish_exam"><span>Exams</span></a></li>
+                                    <li><a id="enter_marks"><span>Enter exam marks</span></a>
                                 {% endif %}
                             </ul>
                         </div>
@@ -89,6 +90,10 @@
 
     $('#finish_exam').click(function() {
         window.location.href = '/teacher/active-exams/';
+    });
+
+     $('#enter_marks').click(function() {
+        window.location.href = '/teacher/exam/marks/';
     });
 
 </script>
