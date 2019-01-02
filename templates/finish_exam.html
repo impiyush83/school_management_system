@@ -85,13 +85,20 @@
                         </article>
                         <br>
                         {% for exam in expired_exams %}
-                         <form method="post" id="enter_marks">
+                         <form method="post" action="/teacher/exam/marks/" id="enter_marks">
                              <br>
                              <article>
                                     <h2> {{ exam.id }}   -  Subject ( {{ exam.subject.name }}) <  Course( {{ exam.subject.course }} )
                                         <  Department( {{ exam.subject.department }} )</h2>
                                  <h2 style="color:red;"> Created at {{ exam.created }} </h2>
                                  <br>
+                                    <input type="number"  name="exam_id" value="{{ exam.id}}" style="display:none">
+                                    <input type="number" id="subject_id" name="subject_id" value="{{ exam.subject.id}}" style="display:none">
+                                 {% if not exam.marks_entered %}
+                                    <input type="submit"  class="button" value="Enter marks">
+                                {% else %}
+                                    <input type="submit1"  class="button" value="Marks Assigned" disabled>
+                                 {% endif %}
                             </article>
                          </form>
                         {% endfor %}

@@ -297,7 +297,7 @@ def close_active_exams(request):
         return AUTHENTICATION_ERROR
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 @permission_classes((AllowAny,))
 def assign_exam_marks_dashboard(request):
     if COOKIE_NAME in request.COOKIES:
@@ -310,11 +310,18 @@ def assign_exam_marks_dashboard(request):
         if user.type != 'TEACHER':
             return Response({'message': 'Only Authorized for teacher'},
                             status=HTTP_401_UNAUTHORIZED)
-
+        import pdb
+        pdb.set_trace()
+        subject_id = int(request.data['subject_id'])
+        exam_id = int(request.data['exam_id'])
+        subject = Subjects.with_id(subject_id)[0]
+        students = UserSubjectEngagment.get_all_students_enrolled_with_subject_id(subject)
         return render(
             request,
             'assign_marks.html',
             dict(
+                students=students,
+                exam_id=exam_id
             )
         )
     else:
