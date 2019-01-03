@@ -1,7 +1,7 @@
 import json
 
 import jwt
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -246,8 +246,7 @@ def view_attendance_dashboard(request):
             return Response({'message': 'Only Authorized for teacher'},
                             status=HTTP_401_UNAUTHORIZED)
         subjects = Subjects.get_all_subjects()
-        # ----------------------------- REMAINING to DISABLE -------------------- #
-        attendance = Attendance.get_todays_attendance()
+        attendance = Attendance.get_todays_attendance(subjects)
         return render(
             request,
             'mark_attendance_dashboard.html',
@@ -311,10 +310,6 @@ def insert_student_attendance(request):
         subject_id = request.data.get('subject_id')
         status = request.data.get('status')
         Attendance.bulk_insert(user_id, subject_id, status)
-
-
-
-
-        return SUCCESS
+        return redirect('/user/home/')
     else:
         return AUTHENTICATION_ERROR

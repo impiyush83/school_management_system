@@ -68,10 +68,12 @@
                             <br>
                              <article>
                                     <h2 style="color:red;"> User ID : {{ user.user_id }} </h2>
-                                    <select name="status" class="selection" required>
+                                 <div class="styled-select mycolor semi-square">
+                                     <select name="status" class="selection" required>
                                         <option>P</option>
                                         <option>A</option>
                                      </select>
+                                 </div>
                                     <input type="text" name="user_id" value="{{ user.user_id }}" style="display:none">
                                     <input type="text" name="subject_id" value="{{ subject.id }}" style="display:none">
                             </article>

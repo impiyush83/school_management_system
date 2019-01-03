@@ -65,9 +65,13 @@ class Attendance(models.Model):
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE, null=True)
 
     @staticmethod
-    def get_todays_attendance():
+    def get_todays_attendance(subjects):
         today_date = datetime.datetime.today().strftime('%Y-%m-%d')
-        return Attendance.objects.filter(Q(date=today_date))
+        boolean_object_of_attendance = []
+        for subject in subjects:
+            if not Attendance.objects.filter(Q(date=today_date) & Q(subject=subject)):
+                boolean_object_of_attendance.append(subject.id)
+        return boolean_object_of_attendance
 
     @staticmethod
     def get_todays_attendance_with_subject(subject):
@@ -78,7 +82,8 @@ class Attendance(models.Model):
     def bulk_insert(user_ids, subject_ids, status):
         today_date = datetime.datetime.today().strftime('%Y-%m-%d')
         for entry in range(0, len(user_ids)):
-            record = Attendance(date=today_date, user_id=user_ids[entry], status=status[entry], subject=subject_ids[entry])
+            record = Attendance(date=today_date, user_id=int(user_ids[entry]), status=status[entry],
+                                subject_id=int(subject_ids[entry]))
             record.save()
 
 

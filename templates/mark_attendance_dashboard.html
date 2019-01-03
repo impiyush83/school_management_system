@@ -28,6 +28,29 @@
               margin: 4px 2px;
               cursor: pointer;
             }
+             .styled-select {
+               height: 29px;
+               overflow: hidden;
+               width: 100%;
+            }
+
+            .styled-select select {
+               background: transparent;
+               border: none;
+               font-size: 14px;
+               height: 29px;
+               padding: 5px; /* If you add too much padding here, the options won't show in IE */
+               width: 100%;
+            }
+
+            .mycolor   { background-color: #0066cc; }
+
+            .semi-square {
+               -webkit-border-radius: 5px;
+               -moz-border-radius: 5px;
+               border-radius: 5px;
+            }
+
 
         </style>
         <meta charset="utf-8">
@@ -63,7 +86,8 @@
                             </div>
                         </article>
                         {% for subject in subjects %}
-                        <form method="post" action="/teacher/attendance/assign/">
+                        {% if subject.id in attendance %}
+                          <form method="post" action="/teacher/attendance/assign/">
                             <br>
                              <article>
                                     <h2 style="color:red;"> Subject ID : {{ subject.id }} </h2>
@@ -74,6 +98,16 @@
                             </article>
                          </form>
                         <hr>
+                         {%  else  %}
+
+                             <article>
+                                    <h2 style="color:red;"> Subject ID : {{ subject.id }} </h2>
+                                    <h2> Subject ( {{ subject.name }}) <  Course( {{ subject.course }} )
+                                        <  Department( {{ subject.department }} ) </h2>
+                                    <input type="number" name="id" value="{{ subject.id }}" style="display:none">
+                                    <input type="submit"  class="button1" value="Attendance marked for {{ subject.name }}" disabled>
+                            </article>
+                        {% endif %}
                         {% endfor %}
                         <br>
                     </div>
