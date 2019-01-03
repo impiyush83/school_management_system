@@ -16,7 +16,7 @@ from school_management_app.constants.response_constants import SUCCESS, AUTHENTI
 from school_management_app.login import get_user
 from school_management_app.models import User, Subjects, UserSubjectEngagment, ExamHistory, StudentExamRecords
 from school_management_app.util import get_subject_id_from_active_exams, \
-    get_list_of_users_marks
+    get_list_of_users_marks, check_encrypted_password
 from school_management_project import settings
 
 
@@ -73,7 +73,7 @@ def user_login(request):
     if not user:
         return Response({'message': 'User not found'},
                         status=HTTP_404_NOT_FOUND)
-    if user.password != password:
+    if not check_encrypted_password(data['password'], user.password):
         return Response({'message': 'Invalid credentials'},
                         status=HTTP_401_UNAUTHORIZED)
     payload = dict(user_id=user.id, username=user.username, exp=datetime.utcnow() + settings.JWT_COOKIE_EXPIRATION)

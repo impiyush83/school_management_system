@@ -1,3 +1,12 @@
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(
+    schemes=["pbkdf2_sha256"],
+    default="pbkdf2_sha256",
+    pbkdf2_sha256__default_rounds=30000
+)
+
+
 def get_subject_id_from_active_exams(active_exams):
     subjects_active_for_exam = []
     for exam in active_exams:
@@ -16,3 +25,11 @@ def get_list_of_users_marks(data):
         else:
             continue
     return students, marks
+
+
+def encrypt_password(password):
+    return pwd_context.encrypt(password)
+
+
+def check_encrypted_password(password, hashed):
+    return pwd_context.verify(password, hashed)

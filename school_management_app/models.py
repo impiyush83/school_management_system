@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q
 
 from school_management_app.constants.model_constants import UserType, AttendanceStatus, ExamStatus
+from school_management_app.util import encrypt_password
 
 
 class User(models.Model):
@@ -24,7 +25,8 @@ class User(models.Model):
 
     @classmethod
     def insert_user(cls, data, user_type):
-        user = User(name=data['name'], username=data['username'], password=data['password'], type=user_type)
+        encrypted_password = encrypt_password(data['password'])
+        user = User(name=data['name'], username=data['username'], password=encrypted_password, type=user_type)
         user.save()
 
 
