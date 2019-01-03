@@ -130,13 +130,13 @@ class StudentExamRecords(models.Model):
     @staticmethod
     def add_entries(users, exam):
         for user in users:
-            record = StudentExamRecords(user_id=user.user_id, exam=exam)
+            record = StudentExamRecords(user_id=user.user_id, exam=exam, exam_date=exam.created)
             record.save()
 
     @staticmethod
     def assign_marks(users, marks, exam):
         for index in range(len(users)):
-            record = StudentExamRecords.objects.filter(Q(user_id=users[index]) & Q(exam=exam)).update(
+            StudentExamRecords.objects.filter(Q(user_id=users[index]) & Q(exam=exam)).update(
                 marks=marks[index])
 
 # filter returns querysets

@@ -226,8 +226,6 @@ def insert_exam(request):
             subject_id = request_data.get('id')
             subject = Subjects.with_id(subject_id)
             students_appearing_for_exam = UserSubjectEngagment.get_all_students_enrolled_with_subject_id(subject)
-            import pdb
-            pdb.set_trace()
             if not students_appearing_for_exam:
                 return Response({'message': 'No students enrolled for this course'},
                                 status=HTTP_404_NOT_FOUND)
