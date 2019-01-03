@@ -58,23 +58,27 @@
                         <article>
                             <div class="row wrap-post">
                                 <div class="entry-header">
-                                        <h2 class="entry-title" style="color:#cc0000;"> Select Subject to Mark Attendance : </h2>
+                                        <h2 class="entry-title" style="color:#cc0000;"> Attendance for {{subject.id}} :
+                                            {{ subject.name }} < {{ subject.course}} </h2>
                                 </div>
                             </div>
                         </article>
-                        {% for subject in subjects %}
-                        <form method="post" action="/teacher/attendance/assign/">
+                         <form method="post" action="/teacher/attendance/insert/" id="mark_attendance">
+                        {% for user in users %}
                             <br>
                              <article>
-                                    <h2 style="color:red;"> Subject ID : {{ subject.id }} </h2>
-                                    <h2> Subject ( {{ subject.name }}) <  Course( {{ subject.course }} )
-                                        <  Department( {{ subject.department }} ) </h2>
-                                    <input type="number" name="id" value="{{ subject.id }}" style="display:none">
-                                    <input type="submit"  class="button" value="Mark Attendance for {{ subject.name }}">
+                                    <h2 style="color:red;"> User ID : {{ user.user_id }} </h2>
+                                    <select name="status" class="selection" required>
+                                        <option>P</option>
+                                        <option>A</option>
+                                     </select>
+                                    <input type="text" name="user_id" value="{{ user.user_id }}" style="display:none">
+                                    <input type="text" name="subject_id" value="{{ subject.id }}" style="display:none">
                             </article>
-                         </form>
                         <hr>
                         {% endfor %}
+                             <input type="submit"  class="button" value="Mark Attendance for {{ subject.name }}">
+                         </form>
                         <br>
                     </div>
                 </div>
@@ -122,6 +126,5 @@
     $('#home').click(function() {
         window.location.href = '/user/home/';
     });
-
 
 </script>

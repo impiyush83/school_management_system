@@ -12,3 +12,7 @@ USER_ALREADY_PRESENT = Response({'message': 'User already present'},
                                 status=HTTP_409_CONFLICT)
 DOES_NOT_EXIST_ERROR = Response({'message': 'Objects.get no entry found error !! Django Error '},
                                 status=HTTP_404_NOT_FOUND)
+ATTENDANCE_ALREADY_PRESENT = Response({'message': 'Attendance already marked in db'},
+                                      status=HTTP_409_CONFLICT)
+NO_USER_ENROLLED_FOR_THIS_COURSE = Response({'message': 'No student enrolled for this course !!'},
+                                            status=HTTP_404_NOT_FOUND)

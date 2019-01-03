@@ -69,6 +69,19 @@ class Attendance(models.Model):
         today_date = datetime.datetime.today().strftime('%Y-%m-%d')
         return Attendance.objects.filter(Q(date=today_date))
 
+    @staticmethod
+    def get_todays_attendance_with_subject(subject):
+        today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+        return Attendance.objects.filter(Q(date=today_date) & Q(subject=subject))
+
+    @staticmethod
+    def bulk_insert(user_ids, subject_ids, status):
+        today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+        for entry in range(0, len(user_ids)):
+            record = Attendance(date=today_date, user_id=user_ids[entry], status=status[entry], subject=subject_ids[entry])
+            record.save()
+
+
 class UserSubjectEngagment(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
     created = models.DateField(auto_now_add=True)

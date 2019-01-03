@@ -18,5 +18,7 @@ urlpatterns = [
     path('teacher/exam/marks/', teacher_views.assign_exam_marks_dashboard, name='assign-marks'),
     path('teacher/exam/assign-marks/', teacher_views.assign_exam_marks, name='assign-exam-marks'),
     path('teacher/attendance/dashboard/', teacher_views.view_attendance_dashboard, name='view_attendace_dashboard'),
-
+    path('teacher/attendance/assign/', teacher_views.take_attendance_for_subject, name='take_attendance_per_subject'),
+    path('teacher/attendance/insert/', teacher_views.insert_student_attendance,
+                       name='insert_attendance_per_subject'),
 ]
