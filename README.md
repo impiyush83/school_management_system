@@ -1,5 +1,4 @@
-# ----------------- School Management System -----------------
-
+# School Management System 
 # 1. LOCAL INSTALLATIONS 
 
 a.) pip install -r requirements.txt
