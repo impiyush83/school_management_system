@@ -1,3 +1,5 @@
+import datetime
+
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(
@@ -33,3 +35,9 @@ def encrypt_password(password):
 
 def check_encrypted_password(password, hashed):
     return pwd_context.verify(password, hashed)
+
+
+def get_current_local_date():
+    local_time = datetime.datetime.now() + datetime.timedelta(hours=5, minutes=30)
+    local_date = local_time.strftime('%Y-%m-%d')
+    return local_date

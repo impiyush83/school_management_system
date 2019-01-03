@@ -1,11 +1,9 @@
-import datetime
-
 from django.db import models
 # Create your models here.
 from django.db.models import Q
 
 from school_management_app.constants.model_constants import UserType, AttendanceStatus, ExamStatus
-from school_management_app.util import encrypt_password
+from school_management_app.util import encrypt_password, get_current_local_date
 
 
 class User(models.Model):
@@ -66,23 +64,23 @@ class Attendance(models.Model):
 
     @staticmethod
     def get_todays_attendance(subjects):
-        today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+        local_date = get_current_local_date()
         boolean_object_of_attendance = []
         for subject in subjects:
-            if not Attendance.objects.filter(Q(date=today_date) & Q(subject=subject)):
+            if not Attendance.objects.filter(Q(date=local_date) & Q(subject=subject)):
                 boolean_object_of_attendance.append(subject.id)
         return boolean_object_of_attendance
 
     @staticmethod
     def get_todays_attendance_with_subject(subject):
-        today_date = datetime.datetime.today().strftime('%Y-%m-%d')
-        return Attendance.objects.filter(Q(date=today_date) & Q(subject=subject))
+        local_date = get_current_local_date()
+        return Attendance.objects.filter(Q(date=local_date) & Q(subject=subject))
 
     @staticmethod
     def bulk_insert(user_ids, subject_ids, status):
-        today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+        local_date = get_current_local_date()
         for entry in range(0, len(user_ids)):
-            record = Attendance(date=today_date, user_id=int(user_ids[entry]), status=status[entry],
+            record = Attendance(date=local_date, user_id=int(user_ids[entry]), status=status[entry],
                                 subject_id=int(subject_ids[entry]))
             record.save()
 
