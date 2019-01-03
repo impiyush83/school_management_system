@@ -9,7 +9,7 @@ urlpatterns = [
     path('user/login/', views.user_login, name='login_user'),
     path('user/home/', views.render_homepage, name='render_homepage'),
     path('user/logout/', views.user_logout, name='user_logout'),
-    path('teacher/enroll-student/', views.enroll_student, name='enroll_students_to_course-dashboard'),
+    path('teacher/enroll-student/', teacher_views.enroll_student, name='enroll_students_to_course-dashboard'),
     path('teacher/student-engagement/', teacher_views.engage_student, name='engage_students'),
     path('teacher/exams/', teacher_views.create_exams, name='create-exams-dashboard'),
     path('teacher/exam/add/', teacher_views.insert_exam, name='create-exams'),
@@ -20,5 +20,5 @@ urlpatterns = [
     path('teacher/attendance/dashboard/', teacher_views.view_attendance_dashboard, name='view_attendace_dashboard'),
     path('teacher/attendance/assign/', teacher_views.take_attendance_for_subject, name='take_attendance_per_subject'),
     path('teacher/attendance/insert/', teacher_views.insert_student_attendance,
-                       name='insert_attendance_per_subject'),
+         name='insert_attendance_per_subject'),
 ]

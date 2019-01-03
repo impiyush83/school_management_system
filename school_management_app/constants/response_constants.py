@@ -16,3 +16,5 @@ ATTENDANCE_ALREADY_PRESENT = Response({'message': 'Attendance already marked in 
                                       status=HTTP_409_CONFLICT)
 NO_USER_ENROLLED_FOR_THIS_COURSE = Response({'message': 'No student enrolled for this course !!'},
                                             status=HTTP_404_NOT_FOUND)
+USER_NOT_ALLOWED = Response({'message': 'Only Authorized for teacher'},
+                        status=HTTP_401_UNAUTHORIZED)

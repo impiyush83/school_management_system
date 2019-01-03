@@ -12,7 +12,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED, HTT
 from school_management_app.constants.common_constants import COOKIE_NAME, MASTER_KEY
 from school_management_app.constants.model_constants import UserType
 from school_management_app.constants.response_constants import SUCCESS, AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
-    USER_ALREADY_PRESENT, DOES_NOT_EXIST_ERROR
+    USER_ALREADY_PRESENT, DOES_NOT_EXIST_ERROR, USER_NOT_ALLOWED
 from school_management_app.login import get_user
 from school_management_app.models import User, Subjects
 from school_management_app.util import check_encrypted_password
@@ -85,66 +85,31 @@ def user_login(request):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def render_homepage(request):
-    if COOKIE_NAME in request.COOKIES:
-        cookie = request.COOKIES[COOKIE_NAME]
-        try:
-            data = jwt.decode(cookie, settings.SECRET_KEY)
-        except:
-            return JWT_EXPIRED_COOKIE_ERROR
-        user = User.objects.get(id=data.get('user_id'))
-        return render(request, 'homepage.html', dict(user=user))
-    else:
+    if COOKIE_NAME not in request.COOKIES:
         return AUTHENTICATION_ERROR
+    cookie = request.COOKIES[COOKIE_NAME]
+    try:
+        data = jwt.decode(cookie, settings.SECRET_KEY)
+    except:
+        return JWT_EXPIRED_COOKIE_ERROR
+    user = User.objects.get(id=data.get('user_id'))
+    return render(request, 'homepage.html', dict(user=user))
 
 
 @csrf_exempt
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def user_logout(request):
-    if COOKIE_NAME in request.COOKIES:
-        cookie = request.COOKIES[COOKIE_NAME]
-        try:
-            data = jwt.decode(cookie, settings.SECRET_KEY)
-        except:
-            return JWT_EXPIRED_COOKIE_ERROR
-
-        SUCCESS.set_cookie(COOKIE_NAME, expires=0)
-        return SUCCESS
-    else:
+    if COOKIE_NAME not in request.COOKIES:
         return AUTHENTICATION_ERROR
+    cookie = request.COOKIES[COOKIE_NAME]
+    try:
+        data = jwt.decode(cookie, settings.SECRET_KEY)
+    except:
+        return JWT_EXPIRED_COOKIE_ERROR
 
-
-@api_view(["GET"])
-@permission_classes((AllowAny,))
-def enroll_student(request):
-    if COOKIE_NAME in request.COOKIES:
-        cookie = request.COOKIES[COOKIE_NAME]
-        try:
-            data = jwt.decode(cookie, settings.SECRET_KEY)
-        except:
-            return JWT_EXPIRED_COOKIE_ERROR
-        user = User.objects.get(id=data.get('user_id'))
-        if user.type != 'TEACHER':
-            return Response({'message': 'Only Authorized for teacher'},
-                            status=HTTP_401_UNAUTHORIZED)
-        unenrolled_students = User.get_all_unenrolled_students()
-        enrolled_students = User.get_all_enrolled_students()
-        try:
-            courses = Subjects.get_all_disctinct_courses_and_departments()
-        except:
-            return DOES_NOT_EXIST_ERROR
-        return render(
-            request,
-            'enroll_student.html',
-            dict(
-                unenrolled_students=unenrolled_students,
-                enrolled_students=enrolled_students,
-                courses=courses
-            )
-        )
-    else:
-        return AUTHENTICATION_ERROR
-
+    SUCCESS.set_cookie(COOKIE_NAME, expires=0)
+    return SUCCESS
 
 
 
