@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 # Create your models here.
 from django.db.models import Q
@@ -62,6 +64,10 @@ class Attendance(models.Model):
     status = models.CharField(max_length=2, choices=[(tag, tag.value) for tag in AttendanceStatus], null=False)
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE, null=True)
 
+    @staticmethod
+    def get_todays_attendance():
+        today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+        return Attendance.objects.filter(Q(date=today_date))
 
 class UserSubjectEngagment(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)

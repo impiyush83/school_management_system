@@ -10,7 +10,8 @@ from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED, HTT
 from school_management_app.constants.common_constants import COOKIE_NAME
 from school_management_app.constants.response_constants import SUCCESS, AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
     DOES_NOT_EXIST_ERROR
-from school_management_app.models import User, Subjects, UserSubjectEngagment, ExamHistory, StudentExamRecords
+from school_management_app.models import User, Subjects, UserSubjectEngagment, ExamHistory, StudentExamRecords, \
+    Attendance
 from school_management_app.util import get_subject_id_from_active_exams, \
     get_list_of_users_marks
 from school_management_project import settings
@@ -227,5 +228,34 @@ def assign_exam_marks(request):
             return SUCCESS
         else:
             return DOES_NOT_EXIST_ERROR
+    else:
+        return AUTHENTICATION_ERROR
+
+
+@api_view(["GET"])
+@permission_classes((AllowAny,))
+def view_attendance_dashboard(request):
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return JWT_EXPIRED_COOKIE_ERROR
+        user = User.objects.get(id=data.get('user_id'))
+        if user.type != 'TEACHER':
+            return Response({'message': 'Only Authorized for teacher'},
+                            status=HTTP_401_UNAUTHORIZED)
+        subjects = Subjects.get_all_subjects()
+        import pdb
+        pdb.set_trace()
+        attendance = Attendance.get_todays_attendance()
+        return render(
+            request,
+            'mark_attendance_dashboard.html',
+            dict(
+                subjects=subjects,
+                attendance=attendance
+            )
+        )
     else:
         return AUTHENTICATION_ERROR

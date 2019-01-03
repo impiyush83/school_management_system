@@ -32,6 +32,7 @@
                                     <li><a id="enroll_student"><span>Enroll Student</span></a></li>
                                     <li><a id="create_exam"><span>Create exams</span></a></li>
                                     <li><a id="finish_exam"><span>Exams</span></a></li>
+                                    <li><a id="mark_attendance_dashboard"><span>Mark Attendance</span></a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -116,6 +117,12 @@
     $('#finish_exam').click(function() {
         window.location.href = '/teacher/active-exams/';
     });
+
+    $('#mark_attendance_dashboard').click(function() {
+        window.location.href = '/teacher/attendance/dashboard/';
+    });
+
+
 
 
 </script>
