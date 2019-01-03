@@ -189,7 +189,7 @@ article .entry-content-modified ol {float: left;text-align: justify;margin: 10px
 /* ---------------------------------------------------------------------------- */
 /* -------------------------------------Footer--------------------------------- */
 /* ---------------------------------------------------------------------------- */
-footer{text-align: center;padding: 40px 0;border-top: 1px solid #bbb;margin-top: 1000px;}
+footer{text-align: center;padding: 40px 0;border-top: 1px solid #bbb;margin-top: 10px;}
 footer a{color:#444;font-weight: bold;}
 footer a:hover{color:#000;}
 footer .wrap-footer{color: black;}

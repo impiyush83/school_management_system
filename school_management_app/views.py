@@ -15,7 +15,8 @@ from school_management_app.constants.response_constants import SUCCESS, AUTHENTI
     USER_ALREADY_PRESENT, DOES_NOT_EXIST_ERROR
 from school_management_app.login import get_user
 from school_management_app.models import User, Subjects, UserSubjectEngagment, ExamHistory, StudentExamRecords
-from school_management_app.util import get_subject_id_from_active_exams
+from school_management_app.util import get_subject_id_from_active_exams, \
+    get_list_of_users_marks
 from school_management_project import settings
 
 
@@ -253,7 +254,7 @@ def close_active_exams_dashboard(request):
         active_exams = ExamHistory.get_active_exams()
         subjects = []
         for exam in active_exams:
-            subject = Subjects.with_id(exam.subject_id)[0]
+            subject = Subjects.with_id(exam.subject_id)
             subjects.append(subject)
         expired_exams = ExamHistory.get_expired_exams()
         return render(
@@ -286,7 +287,7 @@ def close_active_exams(request):
                             status=HTTP_401_UNAUTHORIZED)
         try:
             subject_id = request_data.get('id')
-            subject = Subjects.with_id(subject_id)[0]
+            subject = Subjects.with_id(subject_id)
             ExamHistory.finish_exam(subject)
         except:
             return Response({'message': 'Error while enrollment !! DB ERROR !! '},
@@ -310,19 +311,49 @@ def assign_exam_marks_dashboard(request):
         if user.type != 'TEACHER':
             return Response({'message': 'Only Authorized for teacher'},
                             status=HTTP_401_UNAUTHORIZED)
-        import pdb
-        pdb.set_trace()
+
         subject_id = int(request.data['subject_id'])
         exam_id = int(request.data['exam_id'])
-        subject = Subjects.with_id(subject_id)[0]
+        subject = Subjects.with_id(subject_id)
+        marks = [i for i in range(0, 101)]
         students = UserSubjectEngagment.get_all_students_enrolled_with_subject_id(subject)
         return render(
             request,
             'assign_marks.html',
             dict(
                 students=students,
-                exam_id=exam_id
+                exam_id=exam_id,
+                max_marks=marks
             )
         )
+    else:
+        return AUTHENTICATION_ERROR
+
+
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def assign_exam_marks(request):
+    if COOKIE_NAME in request.COOKIES:
+        cookie = request.COOKIES[COOKIE_NAME]
+        try:
+            data = jwt.decode(cookie, settings.SECRET_KEY)
+        except:
+            return JWT_EXPIRED_COOKIE_ERROR
+        user = User.objects.get(id=data.get('user_id'))
+        if user.type != 'TEACHER':
+            return Response({'message': 'Only Authorized for teacher'},
+                            status=HTTP_401_UNAUTHORIZED)
+        formdata = request.data['data']
+        if formdata:
+            exam_id = int(formdata[1]['exam_id'])
+            exam = ExamHistory.with_id(exam_id)
+            subject_id = exam.subject.id
+            subject = Subjects.with_id(subject_id)
+            users, marks = get_list_of_users_marks(formdata)
+            StudentExamRecords.assign_marks(users, marks, exam)
+            ExamHistory.update_with_id(exam_id)
+            return SUCCESS
+        else:
+            return DOES_NOT_EXIST_ERROR
     else:
         return AUTHENTICATION_ERROR

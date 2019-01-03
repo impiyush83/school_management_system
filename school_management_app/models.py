@@ -50,7 +50,7 @@ class Subjects(models.Model):
 
     @staticmethod
     def with_id(id):
-        return Subjects.objects.filter(id=id)
+        return Subjects.objects.filter(id=id).first()
 
 
 class Attendance(models.Model):
@@ -110,6 +110,14 @@ class ExamHistory(models.Model):
         for exam in exams_to_finish:
             ExamHistory.objects.filter(subject=subject).update(status=ExamStatus.EXPIRED)
 
+    @staticmethod
+    def update_with_id(id):
+        ExamHistory.objects.filter(id=id).update(marks_entered=1)
+
+    @staticmethod
+    def with_id(id):
+        return ExamHistory.objects.filter(id=id).first()
+
 
 class StudentExamRecords(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
@@ -117,12 +125,19 @@ class StudentExamRecords(models.Model):
     exam = models.ForeignKey(ExamHistory, on_delete=models.CASCADE)
     marks = models.IntegerField(null=False, default=-1)
     outof = models.IntegerField(default=100)
+    exam_date = models.DateField(null=False)
 
     @staticmethod
     def add_entries(users, exam):
         for user in users:
             record = StudentExamRecords(user_id=user.user_id, exam=exam)
             record.save()
+
+    @staticmethod
+    def assign_marks(users, marks, exam):
+        for index in range(len(users)):
+            record = StudentExamRecords.objects.filter(Q(user_id=users[index]) & Q(exam=exam)).update(
+                marks=marks[index])
 
 # filter returns querysets
 # get returns objects -> returns error if nothing found.
