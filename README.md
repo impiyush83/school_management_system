@@ -1,5 +1,6 @@
 # School Management System 
-# 1. LOCAL INSTALLATIONS 
+
+1. LOCAL INSTALLATIONS 
 
 a.) pip install -r requirements.txt
 b.) python manage.py migrate
