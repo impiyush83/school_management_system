@@ -221,16 +221,21 @@ def insert_exam(request):
         user = User.objects.get(id=data.get('user_id'))
         if user.type != 'TEACHER':
             return Response({'message': 'Only Authorized for teacher'},
-                            status=HTTP_401_UNAUTHORIZED)
+                            status=HTTP_404_NOT_FOUND)
         try:
             subject_id = request_data.get('id')
-            subject = Subjects.with_id(subject_id)[0]
-            ExamHistory.insert_active_exam(subject)
+            subject = Subjects.with_id(subject_id)
             students_appearing_for_exam = UserSubjectEngagment.get_all_students_enrolled_with_subject_id(subject)
+            import pdb
+            pdb.set_trace()
+            if not students_appearing_for_exam:
+                return Response({'message': 'No students enrolled for this course'},
+                                status=HTTP_404_NOT_FOUND)
+            ExamHistory.insert_active_exam(subject)
             exam = ExamHistory.get_active_exams_with_subject_id(subject)[0]
             StudentExamRecords.add_entries(students_appearing_for_exam, exam)
         except:
-            return Response({'message': 'Error while enrollment !! DB ERROR !! '},
+            return Response({'message': 'Error while inserting exam !! DB ERROR !! '},
                             status=HTTP_409_CONFLICT)
 
         return SUCCESS
