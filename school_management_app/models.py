@@ -84,6 +84,10 @@ class Attendance(models.Model):
                                 subject_id=int(subject_ids[entry]))
             record.save()
 
+    @staticmethod
+    def get_attendance_of_student_for_all_subjects(user):
+        return Attendance.objects.filter(user=user)
+
 
 class UserSubjectEngagment(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
@@ -103,6 +107,13 @@ class UserSubjectEngagment(models.Model):
     def get_all_students_enrolled_with_subject_id(subject):
         return UserSubjectEngagment.objects.filter(subject=subject)
 
+    @staticmethod
+    def get_all_students_enrolled_with_user(user):
+        user_subject_engagement = UserSubjectEngagment.objects.filter(user=user)
+        subjects_enrolled = []
+        for user_subject_object in user_subject_engagement:
+            subjects_enrolled.append(user_subject_object.subject.id)
+        return subjects_enrolled
 
 class ExamHistory(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)

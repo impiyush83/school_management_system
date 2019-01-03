@@ -20,8 +20,8 @@
                             <ul>
                                 {% if user.type == 'STUDENT' %}
                                     <h2><li><a><span style="color:blue;">Student Dashboard</span></a></li> </h2>
-                                    <li><a id="view_attendance"><span>View Attendance</span></a></li>
-                                    <li><a id="view_exam_marks"><span>View Exam Marks</span></a></li>
+                                    <li><a id="student_view_attendance"><span>View Attendance</span></a></li>
+                                    <li><a id="student_view_exam_marks"><span>View Exam Marks</span></a></li>
                                 {% elif user.type == 'PARENT' %}
                                     <h2><li><a><span style="color:green;">Parent Dashboard</span></a></li></h2>
                                     <li><a id="link_student_account"><span>Link Your Student's Account</span></a></li>
@@ -120,6 +120,11 @@
 
     $('#mark_attendance_dashboard').click(function() {
         window.location.href = '/teacher/attendance/dashboard/';
+    });
+
+
+    $('#student_view_attendance').click(function() {
+        window.location.href = '/student/attendance/';
     });
 
 

@@ -12,9 +12,9 @@ from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED, HTT
 from school_management_app.constants.common_constants import COOKIE_NAME, MASTER_KEY
 from school_management_app.constants.model_constants import UserType
 from school_management_app.constants.response_constants import SUCCESS, AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
-    USER_ALREADY_PRESENT, DOES_NOT_EXIST_ERROR, USER_NOT_ALLOWED
+    USER_ALREADY_PRESENT
 from school_management_app.login import get_user
-from school_management_app.models import User, Subjects
+from school_management_app.models import User
 from school_management_app.util import check_encrypted_password
 from school_management_project import settings
 
