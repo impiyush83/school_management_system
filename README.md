@@ -1,1 +1,5 @@
-# school_management_system
+# ------------------- School Management System --------------------
+
+# 1. INSTALLATIONS 
+
+
