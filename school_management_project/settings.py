@@ -134,4 +134,5 @@ JWT_COOKIE_EXPIRATION = datetime.timedelta(days=364)
 APPEND_SLASH = False
 
 import os
-STATIC_ROOT = os.path.join('static')
+# STATIC_ROOT = os.path.join(BASE_DIR, ‘staticfiles’)
+STATIC_ROOT = os.path.join('staticfiles')
