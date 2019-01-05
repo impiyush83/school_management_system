@@ -120,6 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -131,3 +132,6 @@ REST_FRAMEWORK = {
 JWT_COOKIE_EXPIRATION = datetime.timedelta(days=364)
 
 APPEND_SLASH = False
+
+import os
+STATIC_ROOT = os.path.join('static')
