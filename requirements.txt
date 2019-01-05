@@ -10,3 +10,4 @@ python-dateutil==2.7.5
 pytz==2018.7
 pytzdata==2018.7
 six==1.12.0
+whitenoise==4.1.2
