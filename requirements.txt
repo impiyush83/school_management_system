@@ -2,7 +2,9 @@ Django==2.0.8
 djangorestframework==3.9.0
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==3.3
+gunicorn==19.9.0
 passlib==1.7.1
+pendulum==2.0.4
 PyJWT==1.7.1
 python-dateutil==2.7.5
 pytz==2018.7
