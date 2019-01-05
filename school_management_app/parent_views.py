@@ -7,7 +7,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED
 
 from school_management_app.constants.common_constants import COOKIE_NAME, AttendanceCustomObject
 from school_management_app.constants.response_constants import AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
-    ONLY_STUDENT_ALLOWED, ONLY_PARENT_ALLOWED
+    ONLY_STUDENT_ALLOWED, ONLY_PARENT_ALLOWED, INVALID_CREDENTIALS
 from school_management_app.models import User, UserSubjectEngagment, Attendance, StudentExamRecords
 from school_management_app.util import get_current_local_date_in_datetime_format, check_encrypted_password
 from school_management_project import settings
@@ -35,8 +35,7 @@ def select_student_to_view_exam_marks(request):
                         status=HTTP_404_NOT_FOUND)
 
     if not check_encrypted_password(password, user.password):
-        return Response({'message': 'Invalid credentials'},
-                        status=HTTP_401_UNAUTHORIZED)
+        return INVALID_CREDENTIALS
     if not user.enrolled:
         return Response({'message': 'User not enrolled in course !!! '},
                         status=HTTP_404_NOT_FOUND)
@@ -71,6 +70,9 @@ def select_student_to_view_attendance(request):
     if not user:
         return Response({'message': 'No such student !!! '},
                         status=HTTP_404_NOT_FOUND)
+
+    if not check_encrypted_password(password, user.password):
+        return INVALID_CREDENTIALS
     if not user.enrolled:
         return Response({'message': 'User not enrolled in course !!! '},
                         status=HTTP_404_NOT_FOUND)

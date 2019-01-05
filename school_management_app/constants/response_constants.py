@@ -22,3 +22,5 @@ ONLY_STUDENT_ALLOWED = Response({'message': 'Only Authorized for student'},
                                 status=HTTP_401_UNAUTHORIZED)
 ONLY_PARENT_ALLOWED = Response({'message': 'Only Authorized for parent'},
                                status=HTTP_401_UNAUTHORIZED)
+INVALID_CREDENTIALS = Response({'message': 'Invalid credentials'},
+                        status=HTTP_401_UNAUTHORIZED)

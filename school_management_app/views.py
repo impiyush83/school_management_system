@@ -12,7 +12,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_401_UNAUTHORIZED, HTT
 from school_management_app.constants.common_constants import COOKIE_NAME, MASTER_KEY
 from school_management_app.constants.model_constants import UserType
 from school_management_app.constants.response_constants import SUCCESS, AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
-    USER_ALREADY_PRESENT
+    USER_ALREADY_PRESENT, INVALID_CREDENTIALS
 from school_management_app.login import get_user
 from school_management_app.models import User
 from school_management_app.util import check_encrypted_password
@@ -73,8 +73,7 @@ def user_login(request):
         return Response({'message': 'User not found'},
                         status=HTTP_404_NOT_FOUND)
     if not check_encrypted_password(data['password'], user.password):
-        return Response({'message': 'Invalid credentials'},
-                        status=HTTP_401_UNAUTHORIZED)
+        return INVALID_CREDENTIALS
     payload = dict(user_id=user.id, username=user.username, exp=datetime.utcnow() + settings.JWT_COOKIE_EXPIRATION)
     # create payload of username, primary key which is id and expiration time.
     token = jwt.encode(payload, settings.SECRET_KEY).decode('utf-8')
