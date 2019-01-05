@@ -3,8 +3,6 @@ from django.urls import path
 from school_management_app import teacher_views, student_views, parent_views
 from . import views
 
-
-
 urlpatterns = [
     # general views
     path('', views.index, name='index_page'),
@@ -23,16 +21,11 @@ urlpatterns = [
     path('teacher/exam/assign-marks/', teacher_views.assign_exam_marks, name='assign-exam-marks'),
     path('teacher/attendance/dashboard/', teacher_views.view_attendance_dashboard, name='view_attendace_dashboard'),
     path('teacher/attendance/assign/', teacher_views.take_attendance_for_subject, name='take_attendance_per_subject'),
-    path('teacher/attendance/insert/', teacher_views.insert_student_attendance,
-         name='insert_attendance_per_subject'),
+    path('teacher/attendance/insert/', teacher_views.insert_student_attendance, name='insert_attendance_per_subject'),
     # student views
-    path('student/attendance/', student_views.view_attendance,
-         name='view_student_attendance'),
-    path('student/exam/marks/', student_views.view_exam_marks,
-         name='view_student_exam_marks'),
-    #parent views
-    path('parent/exam/marks/', parent_views.select_student_to_view_exam_marks,
-         name='parent_view_student_exam_marks'),
-    path('parent/attendance/', parent_views.select_student_to_view_attendance,
-         name='view_student_exam_marks'),
+    path('student/attendance/', student_views.view_attendance, name='view_student_attendance'),
+    path('student/exam/marks/', student_views.view_exam_marks, name='view_student_exam_marks'),
+    # parent views
+    path('parent/exam/marks/', parent_views.select_student_to_view_exam_marks, name='parent_view_student_exam_marks'),
+    path('parent/attendance/', parent_views.select_student_to_view_attendance, name='view_student_exam_marks'),
 ]
