@@ -33,8 +33,7 @@ def select_student_to_view_exam_marks(request):
     if not user:
         return Response({'message': 'No such student !!! '},
                         status=HTTP_404_NOT_FOUND)
-    import pdb
-    pdb.set_trace()
+
     if not check_encrypted_password(password, user.password):
         return Response({'message': 'Invalid credentials'},
                         status=HTTP_401_UNAUTHORIZED)
@@ -66,9 +65,16 @@ def select_student_to_view_attendance(request):
     parent = User.objects.get(id=data.get('user_id'))
     if parent.type != 'PARENT':
         return ONLY_PARENT_ALLOWED
+    username = request.data.get('student_username1')
+    password = request.data.get('student_password1')
+    user = User.with_username(username)
+    if not user:
+        return Response({'message': 'No such student !!! '},
+                        status=HTTP_404_NOT_FOUND)
     if not user.enrolled:
         return Response({'message': 'User not enrolled in course !!! '},
                         status=HTTP_404_NOT_FOUND)
+
     user_subject_engagement_record = UserSubjectEngagment.with_student(user)
     user_enrollment_date = user_subject_engagement_record.created
     local_datetime = get_current_local_date_in_datetime_format()
