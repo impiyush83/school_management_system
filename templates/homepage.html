@@ -74,11 +74,6 @@
                                     <h2><li><a><span style="color:blue;">Student Dashboard</span></a></li> </h2>
                                     <li><a id="student_view_attendance"><span>View Attendance</span></a></li>
                                     <li><a id="student_view_exam_marks"><span>View Exam Marks</span></a></li>
-                                {% elif user.type == 'PARENT' %}
-                                    <h2><li><a><span style="color:green;">Parent Dashboard</span></a></li></h2>
-                                    <!--<li><a id="link_student_account"><span>Link Your Student's Account</span></a></li>-->
-                                    <li><a id="view_attendance"><span>View Attendance</span></a></li>
-                                    <li><a id="view_exam_marks"><span>View Exam Marks</span></a></li>
                                 {% elif user.type == 'TEACHER' %}
                                     <h2> <li><a><span style="color:red;">Teacher Dashboard</span></a></li></h2>
                                     <li><a id="enroll_student"><span>Enroll Student</span></a></li>
