@@ -29,6 +29,10 @@ class User(models.Model):
         user = User(name=data['name'], username=data['username'], password=encrypted_password, type=user_type)
         user.save()
 
+    @staticmethod
+    def with_username(username):
+        return User.objects.filter(username=username).first()
+
 
 class Subjects(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
@@ -96,6 +100,10 @@ class UserSubjectEngagment(models.Model):
     subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
 
     @staticmethod
+    def with_student(student):
+        return UserSubjectEngagment.objects.filter(user=student).first()
+
+    @staticmethod
     def create_user_enrollment_entries(id, course):
         user = User.objects.get(id=id)
         subjects = Subjects.objects.filter(course=course)
@@ -108,12 +116,13 @@ class UserSubjectEngagment(models.Model):
         return UserSubjectEngagment.objects.filter(subject=subject)
 
     @staticmethod
-    def get_all_students_enrolled_with_user(user):
+    def get_all_subjects_enrolled_with_user(user):
         user_subject_engagement = UserSubjectEngagment.objects.filter(user=user)
         subjects_enrolled = []
         for user_subject_object in user_subject_engagement:
-            subjects_enrolled.append(user_subject_object.subject.id)
+            subjects_enrolled.append(user_subject_object.subject)
         return subjects_enrolled
+
 
 class ExamHistory(models.Model):
     id = models.IntegerField(primary_key=True, auto_created=True)
@@ -138,6 +147,12 @@ class ExamHistory(models.Model):
     @staticmethod
     def get_active_exams_with_subject_id(subject):
         return ExamHistory.objects.filter(Q(status=ExamStatus.ACTIVE) & Q(subject=subject))
+
+    @staticmethod
+    def get_exams_with_subject_ids(subjects):
+        result = []
+        for subject in subjects:
+            results = ExamHistory.objects.filter(subject=subject)
 
     @staticmethod
     def finish_exam(subject):
@@ -173,6 +188,10 @@ class StudentExamRecords(models.Model):
         for index in range(len(users)):
             StudentExamRecords.objects.filter(Q(user_id=users[index]) & Q(exam=exam)).update(
                 marks=marks[index])
+
+    @staticmethod
+    def get_exams_with_user(user):
+        return StudentExamRecords.objects.filter(user=user)
 
 # filter returns querysets
 # get returns objects -> returns error if nothing found.

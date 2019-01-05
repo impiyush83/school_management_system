@@ -2,6 +2,56 @@
 {% load static %}
 <html lang="en">
     <head>
+        <style>
+            .button {
+              background-color: #4CAF50;
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+            }
+
+             .button1 {
+              background-color:  #000000;
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              cursor: pointer;
+            }
+
+            .styled-select {
+               height: 29px;
+               overflow: hidden;
+               width: 100%;
+            }
+
+            .styled-select select {
+               background: transparent;
+               border: none;
+               font-size: 14px;
+               height: 29px;
+               padding: 5px; /* If you add too much padding here, the options won't show in IE */
+               width: 100%;
+            }
+
+            .mycolor   { background-color: #0066cc; }
+
+            .semi-square {
+               -webkit-border-radius: 5px;
+               -moz-border-radius: 5px;
+               border-radius: 5px;
+            }
+
+        </style>
         <meta charset="utf-8">
         <title>Home</title>
         <link rel="stylesheet" href="{% static 'css/zerogrid.css' %}">
@@ -10,6 +60,8 @@
         <script src="{% static 'js/jquery1111.min.js' %}" type="text/javascript"></script>
         <script src="{% static 'js/script.js' %}"></script>
         <link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet">
+
+
     </head>
     <body>
         <div class="wrap-body">
@@ -24,7 +76,7 @@
                                     <li><a id="student_view_exam_marks"><span>View Exam Marks</span></a></li>
                                 {% elif user.type == 'PARENT' %}
                                     <h2><li><a><span style="color:green;">Parent Dashboard</span></a></li></h2>
-                                    <li><a id="link_student_account"><span>Link Your Student's Account</span></a></li>
+                                    <!--<li><a id="link_student_account"><span>Link Your Student's Account</span></a></li>-->
                                     <li><a id="view_attendance"><span>View Attendance</span></a></li>
                                     <li><a id="view_exam_marks"><span>View Exam Marks</span></a></li>
                                 {% elif user.type == 'TEACHER' %}
@@ -53,6 +105,25 @@
                             <div class="row wrap-post">
                                 <div class="entry-header">
                                         <h2 class="entry-title" style="color:#000000;"> Hello  {{ user.type }} !</h2>
+
+                                        {% if user.type == 'PARENT' %}
+
+                                        <form action="/parent/attendance/" method="post">
+
+                                             <input type="text" class="button1" id="student_username1" name="student_username1" placeholder="Enter Students username">
+                                        <input type="text"  class="button1" name="student_password1" id="student_password1" placeholder="Enter students password">
+                                        <input type="submit"  class="button" value="Check Attendance">
+
+                                        </form>
+
+                                        <form action="/parent/exam/marks/" method="post">
+
+                                       <input type="text" class="button1" id="student_username2" name="student_username2" placeholder="Enter Students username">
+                                        <input type="text"  class="button1" name="student_password2" id="student_password2" placeholder="Enter students password">
+                                        <input type="submit"  class="button" value="Check Marks">
+
+                                             </form>
+                                        {% endif %}
                                 </div>
                             </div>
                         </article>
@@ -126,6 +197,11 @@
     $('#student_view_attendance').click(function() {
         window.location.href = '/student/attendance/';
     });
+
+ $('#student_view_exam_marks').click(function() {
+        window.location.href = '/student/exam/marks/';
+    });
+
 
 
 

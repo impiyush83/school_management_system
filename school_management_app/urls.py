@@ -1,7 +1,9 @@
 from django.urls import path
 
-from school_management_app import teacher_views, student_views
+from school_management_app import teacher_views, student_views, parent_views
 from . import views
+
+
 
 urlpatterns = [
     # general views
@@ -26,4 +28,11 @@ urlpatterns = [
     # student views
     path('student/attendance/', student_views.view_attendance,
          name='view_student_attendance'),
+    path('student/exam/marks/', student_views.view_exam_marks,
+         name='view_student_exam_marks'),
+    #parent views
+    path('parent/exam/marks/', parent_views.select_student_to_view_exam_marks,
+         name='parent_view_student_exam_marks'),
+    path('parent/attendance/', parent_views.select_student_to_view_attendance,
+         name='view_student_exam_marks'),
 ]

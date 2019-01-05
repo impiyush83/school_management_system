@@ -110,6 +110,3 @@ def user_logout(request):
 
     SUCCESS.set_cookie(COOKIE_NAME, expires=0)
     return SUCCESS
-
-
-
