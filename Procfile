@@ -1,1 +1,1 @@
-web: python manage.py runserver 0.0.0.0:8000 --noreload
+web: gunicorn school_management_project.wsgi:application --log-file -
