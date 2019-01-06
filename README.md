@@ -1,12 +1,17 @@
 # School Management System 
 
-1. **LOCAL INSTALLATIONS** 
+1. **HEROKU DEPLOYMENT LINK**
+
+    * Read system flow before using the app. 
+    *  [Click me to go to hosted web app](https://school-managment-system.herokuapp.com/ "School management system")
+
+2. **LOCAL INSTALLATIONS** 
 
     * pip install -r requirements.txt
     * python manage.py migrate
     * python manage.py runserver
 
-2. **SYSTEM FLOW**
+3. **SYSTEM FLOW**
 
     * Types of Users:
     
