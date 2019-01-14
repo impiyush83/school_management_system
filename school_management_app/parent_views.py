@@ -97,7 +97,7 @@ def select_student_to_view_attendance(request):
         request,
         'view_attendance.html',
         dict(
-            total_days=total_days.days,
+            total_days=total_days.days + 1,
             attendance=attendance
 
         )
