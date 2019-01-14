@@ -1,13 +1,17 @@
+import this
+
+from django.http import HttpResponse
+from django.shortcuts import render
+from rest_framework import request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT, HTTP_404_NOT_FOUND
 
 SUCCESS = Response({'message': 'Success'}, status=HTTP_200_OK)
-AUTHENTICATION_ERROR = Response(
-    {'message': 'Cookie not found'},
-    status=HTTP_401_UNAUTHORIZED
-)
-JWT_EXPIRED_COOKIE_ERROR = Response({'message': 'JWT Expired'},
-                                    status=HTTP_401_UNAUTHORIZED)
+
+AUTHENTICATION_ERROR = HttpResponse('Cookie not found', status=HTTP_401_UNAUTHORIZED)
+
+JWT_EXPIRED_COOKIE_ERROR = HttpResponse('Your cookie is invalid !!', status=HTTP_401_UNAUTHORIZED)
+
 USER_ALREADY_PRESENT = Response({'message': 'User already present'},
                                 status=HTTP_409_CONFLICT)
 DOES_NOT_EXIST_ERROR = Response({'message': 'Objects.get no entry found error !! Django Error '},
@@ -23,4 +27,4 @@ ONLY_STUDENT_ALLOWED = Response({'message': 'Only Authorized for student'},
 ONLY_PARENT_ALLOWED = Response({'message': 'Only Authorized for parent'},
                                status=HTTP_401_UNAUTHORIZED)
 INVALID_CREDENTIALS = Response({'message': 'Invalid credentials'},
-                        status=HTTP_401_UNAUTHORIZED)
+                               status=HTTP_401_UNAUTHORIZED)
