@@ -311,7 +311,7 @@ def enroll_student(request):
     unenrolled_students = User.get_all_unenrolled_students()
     enrolled_students = User.get_all_enrolled_students()
     try:
-        courses = Subjects.get_all_disctinct_courses_and_departments()
+        courses = Subjects.get_all_distinct_courses_and_departments()
     except:
         return DOES_NOT_EXIST_ERROR
     return render(

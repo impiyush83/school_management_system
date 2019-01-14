@@ -41,7 +41,7 @@ class Subjects(models.Model):
     department = models.CharField(max_length=10, null=False)
 
     @staticmethod
-    def get_all_disctinct_courses_and_departments():
+    def get_all_distinct_courses_and_departments():
         courses = []
         all_records = Subjects.objects.all()
         for record in all_records:
