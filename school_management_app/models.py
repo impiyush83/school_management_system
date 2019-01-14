@@ -104,8 +104,8 @@ class UserSubjectEngagment(models.Model):
         return UserSubjectEngagment.objects.filter(user=student).first()
 
     @staticmethod
-    def create_user_enrollment_entries(id, course):
-        user = User.objects.get(id=id)
+    def create_user_enrollment_entries(user_id, course):
+        user = User.objects.get(id=user_id)
         subjects = Subjects.objects.filter(course=course)
         for subject in subjects:
             user_subject_engagment = UserSubjectEngagment(user=user, subject=subject)
