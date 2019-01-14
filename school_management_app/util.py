@@ -47,3 +47,5 @@ def get_current_local_date_in_datetime_format():
     local_time = datetime.datetime.now() + datetime.timedelta(hours=5, minutes=30)
     local_date = local_time
     return local_date
+
+

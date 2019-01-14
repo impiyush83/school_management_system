@@ -24,16 +24,7 @@ def engage_student(request):
     request_data = request.body
     request_data = request_data.decode('utf-8')
     request_data = json.loads(request_data)
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     try:
         id = request_data.get('id')
         course = request_data.get('course').split('->')[1]
@@ -49,17 +40,7 @@ def engage_student(request):
 @api_view(["GET", "POST"])
 @permission_classes((AllowAny,))
 def create_exams(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
-
+    validate_teacher_request(request)
     subjects = Subjects.get_all_subjects()
     active_exams = ExamHistory.get_active_exams()
     active_examination_subjects = get_subject_id_from_active_exams(active_exams)
@@ -79,16 +60,7 @@ def insert_exam(request):
     request_data = request.body
     request_data = request_data.decode('utf-8')
     request_data = json.loads(request_data)
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     try:
         subject_id = request_data.get('id')
         subject = Subjects.with_id(subject_id)
@@ -109,16 +81,7 @@ def insert_exam(request):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def close_active_exams_dashboard(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     active_exams = ExamHistory.get_active_exams()
     subjects = []
     for exam in active_exams:
@@ -141,16 +104,7 @@ def close_active_exams(request):
     request_data = request.body
     request_data = request_data.decode('utf-8')
     request_data = json.loads(request_data)
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     try:
         subject_id = request_data.get('id')
         subject = Subjects.with_id(subject_id)
@@ -165,17 +119,7 @@ def close_active_exams(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def assign_exam_marks_dashboard(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
-
+    validate_teacher_request(request)
     subject_id = int(request.data['subject_id'])
     exam_id = int(request.data['exam_id'])
     subject = Subjects.with_id(subject_id)
@@ -195,16 +139,7 @@ def assign_exam_marks_dashboard(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def assign_exam_marks(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     formdata = request.data['data']
     if formdata:
         exam_id = int(formdata[1]['exam_id'])
@@ -222,16 +157,7 @@ def assign_exam_marks(request):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def view_attendance_dashboard(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     subjects = Subjects.get_all_subjects()
     attendance = Attendance.get_todays_attendance(subjects)
     return render(
@@ -247,16 +173,7 @@ def view_attendance_dashboard(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def take_attendance_for_subject(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     subject_id = int(request.data['id'])
     subject = Subjects.with_id(subject_id)
     attendance = Attendance.get_todays_attendance_with_subject(subject)
@@ -278,17 +195,7 @@ def take_attendance_for_subject(request):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def insert_student_attendance(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
-
+    validate_teacher_request(request)
     user_id = request.data.get('user_id')
     subject_id = request.data.get('subject_id')
     status = request.data.get('status')
@@ -299,16 +206,7 @@ def insert_student_attendance(request):
 @api_view(["GET"])
 @permission_classes((AllowAny,))
 def enroll_student(request):
-    if COOKIE_NAME not in request.COOKIES:
-        return AUTHENTICATION_ERROR
-    cookie = request.COOKIES[COOKIE_NAME]
-    try:
-        data = jwt.decode(cookie, settings.SECRET_KEY)
-    except:
-        return JWT_EXPIRED_COOKIE_ERROR
-    user = User.objects.get(id=data.get('user_id'))
-    if user.type != 'TEACHER':
-        return ONLY_TEACHER_ALLOWED
+    validate_teacher_request(request)
     unenrolled_students = User.get_all_unenrolled_students()
     enrolled_students = User.get_all_enrolled_students()
     try:
@@ -324,3 +222,16 @@ def enroll_student(request):
             courses=courses
         )
     )
+
+
+def validate_teacher_request(request):
+    if COOKIE_NAME not in request.COOKIES:
+        return AUTHENTICATION_ERROR
+    cookie = request.COOKIES[COOKIE_NAME]
+    try:
+        data = jwt.decode(cookie, settings.SECRET_KEY)
+    except:
+        return JWT_EXPIRED_COOKIE_ERROR
+    user = User.objects.get(id=data.get('user_id'))
+    if user.type != 'TEACHER':
+        return ONLY_TEACHER_ALLOWED
