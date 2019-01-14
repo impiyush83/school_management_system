@@ -9,7 +9,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 
 from school_management_app.constants.common_constants import COOKIE_NAME
 from school_management_app.constants.response_constants import SUCCESS, AUTHENTICATION_ERROR, JWT_EXPIRED_COOKIE_ERROR, \
-    DOES_NOT_EXIST_ERROR, ATTENDANCE_ALREADY_PRESENT, NO_USER_ENROLLED_FOR_THIS_COURSE, ONLY_TEACHER_ALLOWED
+    DOES_NOT_EXIST_ERROR, ATTENDANCE_ALREADY_PRESENT, ONLY_TEACHER_ALLOWED
 from school_management_app.models import User, Subjects, UserSubjectEngagment, ExamHistory, StudentExamRecords, \
     Attendance
 from school_management_app.util import get_subject_id_from_active_exams, \
